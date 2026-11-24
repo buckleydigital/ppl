@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QuoteOne Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* VOICE occasion, but restrained: a quietly expensive product site
+   IDEA scale: a flat field of homes to the horizon, every enquiry lifting out and landing with one business
+   PICTURE hero: type only, big and quiet
+   COLOUR light: white hero on a faint dot field, a few dark accent panels, dark footer; teal #14C2C9 used only as the signal
+   TYPE Geist 600-700 tight display, Geist text, Geist Mono for figures
+   LAYOUT generous whitespace, one idea per section, hairline rules, 12-col rhythm; phone: title, picture, buttons */
+:root{color-scheme:light;--r:#14C2C9;--r2:#0A7C83;--void:#07080A;--dk:#0B0C0F;--dk2:#131519;--dk3:#1B1E24;--bd:rgba(255,255,255,.08);--bd2:rgba(255,255,255,.14);--mu-d:#8F95A0;--bg:#FFFFFF;--paper:#F7F6F4;--ink:#0B0C0F;--mu:#61656E;--ln:#EAE7E3;--ok:#1FA971;--okt:#76DDB2}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:88px;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Geist,Inter,system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+h1,h2,h3{margin:0;letter-spacing:-.035em;line-height:1.04;text-wrap:balance;font-weight:600}
+h1{font-size:clamp(42px,5.6vw,76px)}
+h2{font-size:clamp(32px,3.6vw,48px)}
+h3{font-size:18px;letter-spacing:-.015em;line-height:1.3;font-weight:600}
+p{margin:0}
+.band{padding:clamp(72px,9vw,140px) max(5vw,20px)}
+.wrap{max-width:1180px;margin:0 auto}
+.lede{font-size:18px;color:var(--mu);max-width:56ch;margin-top:18px}
+.num{font-family:"Geist Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 22px;border-radius:12px;font:500 15px Geist,sans-serif;text-decoration:none;border:1px solid transparent;cursor:pointer;white-space:nowrap;transition:background .2s,border-color .2s,color .2s}
+.btn svg{width:15px;height:15px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--r);outline-offset:3px}
+.btn.r{background:var(--r);color:#041416;box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+.btn.r:hover{background:#3DD6DC}
+.btn.g{border-color:var(--bd2);color:#fff;background:rgba(255,255,255,.03)}
+.btn.g:hover{border-color:rgba(255,255,255,.32)}
+.btn.k{background:var(--ink);color:#fff}
+.btn.k:hover{background:#25282F}
+.btn.o{border-color:var(--ln);background:#fff;color:var(--ink)}
+.btn.o:hover{border-color:#BDB8B1}
+.tick{width:18px;height:18px;border-radius:50%;background:var(--ink);display:grid;place-items:center;flex:none}
+.tick svg{width:10px;height:10px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--ok);flex:none}
+.note{font-size:13px;color:var(--mu);margin-top:16px}
+.dark{background:var(--dk);color:#fff;border:1px solid #16181D;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+/* header */
+header{position:fixed;top:0;left:0;right:0;z-index:30;background:rgba(7,8,10,.78);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);border-bottom:1px solid var(--bd)}
+.nav{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:24px;height:64px;padding:0 max(5vw,20px);color:#fff}
+@media(min-width:1260px){.nav{padding:0}}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font:600 18px Geist,sans-serif;letter-spacing:-.02em;color:#fff}
+.logo svg{width:24px;height:24px;flex:none}
+.links{display:flex;gap:2px;list-style:none;padding:0;margin:0 0 0 18px}
+.links>li{position:relative}
+.links a,.links button{display:flex;align-items:center;gap:6px;min-height:44px;padding:0 12px;border-radius:8px;color:#B9BEC6;text-decoration:none;font:400 14.5px Geist,sans-serif;background:none;border:0;cursor:pointer}
+.links a:hover,.links button:hover,.links button[aria-expanded=true]{color:#fff}
+.caret{width:9px;height:9px;transition:transform .2s}
+button[aria-expanded=true] .caret{transform:rotate(180deg)}
+.menu{position:absolute;top:calc(100% + 10px);left:0;width:280px;background:#111317;border:1px solid var(--bd2);border-radius:14px;padding:6px;display:none;list-style:none;margin:0;box-shadow:0 24px 48px -16px rgba(0,0,0,.7)}
+.menu.open{display:grid}
+.menu a{flex-direction:column;align-items:flex-start;gap:0;border-radius:10px;padding:10px 12px;color:#fff}
+.menu a:hover{background:rgba(255,255,255,.05)}
+.menu a span{color:var(--mu-d);font-size:13px}
+.navcta{display:flex;gap:8px;margin-left:auto}
+.navcta .btn{min-height:38px;padding:0 14px;font-size:14px;border-radius:10px}
+.burger{display:none;margin-left:auto;width:44px;height:44px;border-radius:10px;background:none;border:1px solid var(--bd2);color:#fff;cursor:pointer;place-items:center}
+@media(max-width:880px){.burger{display:grid}.links,.navcta{display:none}.nav.open{flex-wrap:wrap;height:auto;padding-block:10px 16px}.nav.open .links{display:flex;flex-direction:column;width:100%;order:3;margin:8px 0 0}.nav.open .navcta{display:flex;width:100%;order:4;margin:6px 0 0}.nav.open .navcta .btn{flex:1;min-height:46px}.menu{position:static;width:auto;border:0;background:none;box-shadow:none;padding:0 0 0 8px}}
+/* hero */
+.hero{background:var(--void);color:#fff;position:relative;overflow:hidden;padding-top:clamp(128px,13vw,180px);padding-bottom:0}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(55% 45% at 72% 100%,rgba(20,194,201,.2),transparent 70%);pointer-events:none}
+.hgrid{position:relative;display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(24px,4vw,64px)}
+.htext{padding-bottom:clamp(72px,9vw,128px);max-width:780px}
+.hero .lede{color:var(--mu-d);font-size:18px}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:56px;border-top:1px solid var(--bd)}
+.stats div{padding:18px 16px 0 0}
+.stats div+div{padding-left:16px;border-left:1px solid var(--bd)}
+.stats b{display:block;font-size:22px;font-weight:600;letter-spacing:-.02em;white-space:nowrap}
+.stats span{color:var(--mu-d);font-size:14px}
+.lc{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:0 12px;align-items:center;padding:14px 16px;border-radius:14px;background:rgba(17,19,23,.86);border:1px solid var(--bd2);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 18px 36px -18px rgba(0,0,0,.9)}
+.lc.in{animation:pop .6s cubic-bezier(.2,.8,.2,1)}
+.lc:nth-child(2){opacity:.45;transform:scale(.96)}
+.lc i{grid-row:span 2;width:34px;height:34px;border-radius:9px;background:var(--r);display:grid;place-items:center}
+.lc b{font-size:15px;font-weight:500}
+.lc small{color:var(--mu-d);font-size:13px;grid-column:2}
+.lc em{font-style:normal;font-size:13px;color:var(--mu-d);grid-row:1;grid-column:3;white-space:nowrap}
+.lc u{text-decoration:none;font-size:13px;color:var(--okt);grid-column:3;white-space:nowrap;text-align:right;display:flex;align-items:center;gap:6px;justify-content:flex-end}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media(max-width:900px){.hgrid{grid-template-columns:minmax(0,1fr)}.htext{display:contents}.htext .ctas{order:2;margin-top:28px}.htext .stats{order:3;margin:40px 0 56px}}
+@media(max-width:480px){.stats{grid-template-columns:minmax(0,1fr)}.stats div,.stats div+div{padding:14px 0;border-left:0}.stats div+div{border-top:1px solid var(--bd)}}
+/* section head */
+.head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px 64px;align-items:end;margin-bottom:56px}
+.head .lede{margin:0}
+@media(max-width:820px){.head{grid-template-columns:minmax(0,1fr)}}
+/* route */
+.route{border-radius:20px;overflow:hidden}
+.track{position:relative;height:2px;left:32px;width:75%;background:linear-gradient(90deg,var(--bd2),var(--r));top:44px}
+.track i{position:absolute;top:50%;left:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(20,194,201,.35);animation:ride 5.5s cubic-bezier(.5,0,.5,1) infinite}
+@keyframes ride{0%{left:0;opacity:0}8%{opacity:1}92%{opacity:1}100%{left:100%;opacity:0}}
+.stops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));list-style:none;margin:0;padding:0}
+.stops li{padding:28px 32px 36px;position:relative}
+.stops li+li{border-left:1px solid var(--bd)}
+.pin{width:30px;height:30px;border-radius:50%;background:var(--dk);border:1px solid var(--bd2);display:grid;place-items:center;font:500 13px "Geist Mono",monospace;color:var(--mu-d);position:relative;z-index:1}
+.stops li:last-child .pin{background:var(--r);border-color:var(--r);color:#041416}
+.stops h3{margin-top:28px}
+.stops p{color:var(--mu-d);font-size:15px;margin-top:6px}
+.stops ul{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:8px;font-size:14px;color:#D4D7DC}
+.stops ul li{padding:0;border:0;display:flex;gap:10px;align-items:center}
+.stops ul li::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--mu-d);flex:none}
+@media(max-width:900px){.track{display:none}.stops{grid-template-columns:repeat(2,minmax(0,1fr))}.stops li:nth-child(3){border-left:0}.stops li:nth-child(n+3){border-top:1px solid var(--bd)}}
+@media(max-width:560px){.stops{grid-template-columns:minmax(0,1fr)}.stops li+li{border-left:0;border-top:1px solid var(--bd)}.stops li{padding:24px}.stops h3{margin-top:18px}}
+/* principles */
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--ln)}
+.three>div{padding:32px 32px 8px 0}
+.three>div+div{padding-left:32px;border-left:1px solid var(--ln)}
+.three p{color:var(--mu);font-size:15px;margin-top:8px}
+.vis{height:120px;margin-bottom:28px;display:flex;align-items:center}
+.one{display:flex;align-items:center;gap:12px;width:100%}
+.one span{padding:12px 14px;border-radius:12px;border:1px solid var(--ln);font-size:14px;white-space:nowrap;background:#fff}
+.one span.you{background:var(--ink);color:#fff;border-color:var(--ink)}
+.one i{flex:1;height:1px;background:var(--ink);position:relative;min-width:24px}
+.one i::after{content:"";position:absolute;right:0;top:-3px;width:6px;height:6px;border-top:1px solid var(--ink);border-right:1px solid var(--ink);transform:rotate(45deg)}
+.chk{display:grid;gap:8px;width:100%;font-size:14px}
+.chk div{display:flex;gap:10px;align-items:center}
+.chk .tick{background:var(--ok)}
+.chk .x{width:18px;height:18px;border-radius:50%;border:1px solid #CFCAC3;display:grid;place-items:center;flex:none}
+.chk .x svg{width:8px;height:8px}
+.chk div.no{color:var(--mu)}
+.capbox{width:100%}
+.capbox .row{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:var(--mu)}
+.capbox .row b{font-size:34px;font-weight:600;letter-spacing:-.03em;color:var(--ink)}
+.range{-webkit-appearance:none;appearance:none;width:100%;height:40px;background:transparent;cursor:pointer;margin:0}
+.range::-webkit-slider-runnable-track{height:4px;border-radius:9px;background:linear-gradient(90deg,var(--ink) var(--p,25%),var(--ln) var(--p,25%))}
+.range::-moz-range-track{height:4px;border-radius:9px;background:linear-gradient(90deg,var(--ink) var(--p,25%),var(--ln) var(--p,25%))}
+.range::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;border:1px solid #CFCAC3;margin-top:-8px;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.range::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:1px solid #CFCAC3;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.dkr .range::-webkit-slider-runnable-track{background:linear-gradient(90deg,var(--r) var(--p,25%),var(--dk3) var(--p,25%))}
+.dkr .range::-moz-range-track{background:linear-gradient(90deg,var(--r) var(--p,25%),var(--dk3) var(--p,25%))}
+.dkr .range::-webkit-slider-thumb{border:0}
+.dkr .range::-moz-range-thumb{border:0}
+@media(max-width:860px){.three{grid-template-columns:minmax(0,1fr)}.three>div,.three>div+div{padding:28px 0;border-left:0}.three>div+div{border-top:1px solid var(--ln)}.vis{height:auto;min-height:72px;margin-bottom:20px}}
+/* lead example */
+.ex{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,6vw,96px);align-items:center}
+.lead{border-radius:20px;overflow:hidden}
+.lead .top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 24px;border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.lead .top b{font-weight:500}
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--okt);white-space:nowrap}
+.lead dl{margin:0;display:grid;grid-template-columns:max-content minmax(0,1fr)}
+.lead dt,.lead dd{margin:0;padding:13px 24px;border-bottom:1px solid var(--bd)}
+.lead dt{color:var(--mu-d);font-size:15px}
+.lead dd{font-weight:400;color:#F2F3F5}
+.lead .ft{display:flex;justify-content:space-between;gap:12px;padding:16px 24px;color:var(--mu-d);font-size:14px;flex-wrap:wrap}
+.lead .ft b{color:#fff;font-weight:500}
+.feat{list-style:none;padding:0;margin:32px 0 0;display:grid;border-top:1px solid var(--ln)}
+.feat li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;padding:18px 0;border-bottom:1px solid var(--ln)}
+.feat .tick{margin-top:3px}
+.feat p{color:var(--mu);font-size:15px}
+@media(max-width:880px){.ex{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:460px){.lead dl{grid-template-columns:minmax(0,1fr)}.lead dt{border:0;padding-bottom:0}.lead dd{padding-top:2px}}
+/* compare */
+.vs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.col{border-radius:20px;padding:clamp(24px,3vw,40px);border:1px solid var(--ln);background:#fff}
+.col.dark,.tier.dark{background:var(--dk);color:#fff;border-color:#16181D}
+.col.dark .sub{color:var(--mu-d)}
+.col .sub{color:var(--mu);margin-top:6px;font-size:15px}
+.fun{display:grid;gap:10px;margin:32px 0 12px}
+.fun div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;align-items:center;font-size:13px;color:var(--mu)}
+.col.dark .fun div{color:var(--mu-d)}
+.fun i{display:block;height:6px;border-radius:9px;background:var(--ln)}
+.fun i.pay{background:var(--ink)}
+.col.dark .fun i{background:var(--dk3)}
+.col.dark .fun i.pay{background:var(--r)}
+.col ul{list-style:none;padding:0;margin:20px 0 0;display:grid}
+.col li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;padding:13px 0;border-top:1px solid var(--ln);font-size:15px}
+.col.dark li{border-color:var(--bd)}
+.col .x{width:18px;height:18px;border-radius:50%;border:1px solid #CFCAC3;display:grid;place-items:center;margin-top:3px}
+.col .x svg{width:8px;height:8px}
+.col .tick{margin-top:3px;background:var(--r)}
+@media(max-width:820px){.vs{grid-template-columns:minmax(0,1fr)}}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));list-style:none;margin:0;padding:0;border-top:1px solid var(--ln);border-left:1px solid var(--ln);counter-reset:s}
+.steps li{padding:28px;border-right:1px solid var(--ln);border-bottom:1px solid var(--ln);counter-increment:s}
+.steps li::before{content:counter(s,decimal-leading-zero);display:block;font:500 13px "Geist Mono",monospace;color:var(--mu);margin-bottom:28px}
+.steps li.hot::before{color:var(--r2)}
+.steps p{color:var(--mu);font-size:15px;margin-top:6px}
+.bill{margin-top:16px;border-radius:20px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.bill div{padding:24px 26px}
+.bill div+div{border-left:1px solid var(--bd)}
+.bill b{display:block;font-weight:500}
+.bill span{color:var(--mu-d);font-size:14px}
+@media(max-width:900px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.bill{grid-template-columns:repeat(2,minmax(0,1fr))}.bill div:nth-child(3){border-left:0}.bill div:nth-child(n+3){border-top:1px solid var(--bd)}}
+@media(max-width:560px){.steps{grid-template-columns:minmax(0,1fr)}.steps li{padding:22px}.steps li::before{margin-bottom:14px}.bill{grid-template-columns:minmax(0,1fr)}.bill div+div{border-left:0;border-top:1px solid var(--bd)}}
+/* pricing */
+.price{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.tier{border-radius:20px;padding:32px;border:1px solid var(--ln);background:#fff;display:flex;flex-direction:column;gap:18px}
+.tier.dark .sub,.tier.dark .amt small{color:var(--mu-d)}
+.amt{font-size:clamp(48px,5vw,64px);font-weight:600;letter-spacing:-.045em;line-height:1;white-space:nowrap}
+.amt small{font-size:15px;font-weight:400;letter-spacing:0;color:var(--mu)}
+.tier .sub{color:var(--mu);font-size:15px;margin-top:-6px}
+.inc{list-style:none;padding:0;margin:0;display:grid;font-size:15px;border-top:1px solid var(--ln)}
+.tier.dark .inc{border-color:var(--bd)}
+.inc li{padding:11px 0;border-bottom:1px solid var(--ln)}
+.tier.dark .inc li{border-color:var(--bd)}
+.tier .btn{margin-top:auto}
+@media(max-width:960px){.price{grid-template-columns:minmax(0,1fr)}}
+/* industries */
+.ind{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px}
+.ind h3{font-size:22px;letter-spacing:-.025em;display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--ink)}
+.ind h3 span{font-size:14px;font-weight:400;color:var(--mu);letter-spacing:0}
+.ind ul{list-style:none;padding:0;margin:0}
+.ind li{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--ln);font-size:17px}
+.ind li span{color:var(--mu);font-size:14px;white-space:nowrap}
+@media(max-width:820px){.ind{grid-template-columns:minmax(0,1fr);gap:48px}}
+/* roi */
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-radius:20px;overflow:hidden}
+.ins{padding:clamp(24px,3.5vw,44px);display:grid;gap:26px;border-right:1px solid var(--bd);align-content:start}
+.f label{display:flex;justify-content:space-between;gap:12px;font-size:14px;color:var(--mu-d)}
+.f label b{color:#fff;font-weight:500;white-space:nowrap}
+.f input[type=number]{width:100%;min-height:48px;margin-top:10px;padding:0 14px;border-radius:12px;border:1px solid var(--bd2);background:var(--dk2);color:#fff;font:500 16px "Geist Mono",monospace}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:12px;background:var(--dk2);border:1px solid var(--bd);margin-top:10px}
+.seg button{min-height:42px;border-radius:9px;border:0;background:none;color:var(--mu-d);font:500 14px Geist,sans-serif;cursor:pointer}
+.seg button[aria-pressed=true]{background:#fff;color:var(--ink)}
+.outs{padding:clamp(24px,3.5vw,44px);display:flex;flex-direction:column;gap:22px}
+.outs .k{color:var(--mu-d);font-size:14px}
+.outs .big{font-size:clamp(48px,6vw,72px);font-weight:600;letter-spacing:-.045em;line-height:1;white-space:nowrap;margin-top:-10px}
+.bars{display:grid;gap:12px}
+.bars div{display:grid;grid-template-columns:84px minmax(0,1fr) auto;gap:12px;align-items:center;font-size:13px;color:var(--mu-d)}
+.bars i{height:6px;border-radius:9px;background:var(--dk3);display:block;position:relative;overflow:hidden}
+.bars i span{position:absolute;inset:0 auto 0 0;border-radius:9px;transition:width .35s}
+.bars b{color:#fff;font-weight:500}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--bd);margin-top:auto}
+.kv div{padding:16px 16px 0 0}
+.kv div+div{padding-left:16px;border-left:1px solid var(--bd)}
+.kv span{display:block;color:var(--mu-d);font-size:13px}
+.kv b{font-size:20px;font-weight:500;white-space:nowrap}
+@media(max-width:860px){.calc{grid-template-columns:minmax(0,1fr)}.ins{border-right:0;border-bottom:1px solid var(--bd)}}
+@media(max-width:420px){.kv{grid-template-columns:minmax(0,1fr)}.kv div,.kv div+div{padding:12px 0;border-left:0}.kv div+div{border-top:1px solid var(--bd)}}
+/* platform */
+.app{border-radius:20px;overflow:hidden;box-shadow:0 60px 120px -60px rgba(11,12,15,.55),inset 0 1px 0 rgba(255,255,255,.05)}
+.abar{display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid var(--bd)}
+.abar .dots{display:flex;gap:6px}
+.abar .dots i{width:10px;height:10px;border-radius:50%;background:var(--dk3)}
+.kbar{flex:1;max-width:420px;margin:0 auto;display:flex;align-items:center;gap:10px;min-height:34px;padding:0 12px;border-radius:9px;background:var(--dk2);border:1px solid var(--bd);color:var(--mu-d);font-size:13.5px}
+.kbar span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.kbar kbd{margin-left:auto;font:500 12px Geist,sans-serif;padding:1px 7px;border-radius:6px;border:1px solid var(--bd2);color:#C9CDD4}
+.abody{display:grid;grid-template-columns:190px minmax(0,1fr)}
+.side{padding:14px 10px;display:flex;flex-direction:column;gap:2px;border-right:1px solid var(--bd)}
+.side button{display:flex;align-items:center;gap:10px;min-height:42px;padding:0 12px;border-radius:9px;color:var(--mu-d);font:400 14.5px Geist,sans-serif;cursor:pointer;background:none;border:0;text-align:left}
+.side button[aria-selected=true]{background:rgba(255,255,255,.06);color:#fff}
+.pane{padding:22px;display:grid;gap:14px;align-content:start;min-height:450px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--bd);border-radius:14px;overflow:hidden}
+.kpi{padding:14px 16px}
+.kpi+.kpi{border-left:1px solid var(--bd)}
+.kpi span{color:var(--mu-d);font-size:13px}
+.kpi b{display:block;font-size:24px;font-weight:500;letter-spacing:-.02em;white-space:nowrap;margin-top:2px}
+.meter{height:4px;border-radius:9px;background:var(--dk3);margin-top:10px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--r);border-radius:9px}
+.tw{border:1px solid var(--bd);border-radius:14px;overflow-x:auto}
+.tw table{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
+.tw th{text-align:left;color:var(--mu-d);font-weight:400;padding:11px 16px;border-bottom:1px solid var(--bd)}
+.tw td{padding:11px 16px;border-bottom:1px solid var(--bd);white-space:nowrap;color:#E7E9EC}
+.tw tr:last-child td{border-bottom:0}
+.tw .r{text-align:right}
+.st{font-size:12.5px;padding:2px 9px;border-radius:999px;border:1px solid var(--bd2);color:#C9CDD4}
+.st.new{border-color:rgba(20,194,201,.5);color:#7FE6EA}
+.st.won{border-color:rgba(31,169,113,.45);color:var(--okt)}
+.row2{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid var(--bd);border-radius:14px;padding:12px 16px}
+.row2 span{color:var(--mu-d);font-size:14px}
+.sw{display:flex;align-items:center;gap:10px;font-size:14px;color:#fff;cursor:pointer}
+.sw input{appearance:none;-webkit-appearance:none;width:42px;height:26px;border-radius:99px;background:var(--ok);position:relative;cursor:pointer;margin:0;transition:background .2s;flex:none}
+.sw input::after{content:"";position:absolute;top:3px;left:19px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s}
+.sw input:not(:checked){background:var(--dk3)}
+.sw input:not(:checked)::after{left:3px}
+.pcs{display:flex;flex-wrap:wrap;gap:8px}
+.pcs button{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 8px 0 14px;border-radius:10px;border:1px solid var(--bd2);background:none;color:#fff;font:500 14px "Geist Mono",monospace;cursor:pointer}
+.pcs button span{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;color:var(--mu-d);font:400 14px Geist,sans-serif}
+.pcs button:hover{border-color:var(--r)}
+.addpc{display:flex;gap:8px;flex-wrap:wrap}
+.addpc input{flex:1;min-width:140px;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--bd2);background:var(--dk2);color:#fff;font:500 16px "Geist Mono",monospace}
+.addpc .btn{min-height:44px}
+.err{color:#FF8D98;font-size:14px;min-height:20px}
+.hid{display:none}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi:nth-child(3){border-left:0}.kpi:nth-child(n+3){border-top:1px solid var(--bd)}}
+@media(max-width:760px){.abody{grid-template-columns:minmax(0,1fr)}.side{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--bd)}.side button{flex:none}.kbar kbd{display:none}.pane{padding:14px;min-height:0}}
+@media(max-width:420px){.kpis{grid-template-columns:minmax(0,1fr)}.kpi+.kpi{border-left:0;border-top:1px solid var(--bd)}}
+/* cta + footer */
+.cta{background:var(--void);color:#fff;position:relative;overflow:hidden;text-align:center}
+.cta::before{content:"";position:absolute;left:50%;bottom:-40%;width:70%;height:80%;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(20,194,201,.35),transparent);pointer-events:none}
+.cta .wrap{position:relative;display:grid;justify-items:center;gap:18px}
+.cta h2{font-size:clamp(36px,5vw,64px);max-width:15ch}
+.cta p{color:var(--mu-d);font-size:18px;max-width:50ch}
+footer{background:var(--void);color:#fff;padding:0 max(5vw,20px) 28px;border-top:1px solid var(--bd)}
+.fgrid{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr));gap:32px;padding-top:64px}
+footer h4{margin:0 0 10px;font:400 13px Geist,sans-serif;color:var(--mu-d)}
+footer ul{list-style:none;margin:0;padding:0;display:grid}
+footer li a{display:inline-flex;min-height:36px;align-items:center;text-decoration:none;color:#D9DCE1;font-size:15px}
+footer li a:hover{color:#fff}
+.fb p{color:var(--mu-d);margin-top:14px;max-width:32ch;font-size:15px}
+.wm{display:block;width:100%;height:auto;margin:56px 0 4px;user-select:none}
+.legal{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--bd);padding-top:20px;color:var(--mu-d);font-size:13px}
+@media(max-width:860px){.fgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.fb{grid-column:1/-1}}
+@media(max-width:420px){.fgrid{grid-template-columns:minmax(0,1fr)}}
+/* phones */
+@media(max-width:600px){.band{padding-top:64px;padding-bottom:64px}.hero{padding-top:112px;padding-bottom:0}.head{margin-bottom:32px}.lede,.hero .lede{font-size:17px}.ctas .btn{flex:1 1 100%}.wm{margin-top:40px}.legal{flex-direction:column;gap:4px}.tier{padding:26px}.fun div{grid-template-columns:80px minmax(0,1fr)}.bars div{grid-template-columns:72px minmax(0,1fr) auto}}
+@media(max-width:380px){.lc em{display:none}}
+@media(prefers-reduced-motion:reduce){.lc.in,.track i{animation:none}.track i{left:100%}html{scroll-behavior:auto}}
+
+/* ---- light mode pass ---- */
+header{background:rgba(255,255,255,.82);border-bottom:1px solid var(--ln)}
+.nav,.logo{color:var(--ink)}
+.links a,.links button{color:var(--mu)}
+.links a:hover,.links button:hover,.links button[aria-expanded=true]{color:var(--ink)}
+.menu{background:#fff;border-color:var(--ln);box-shadow:0 24px 48px -20px rgba(11,12,15,.18)}
+.menu a{color:var(--ink)}
+.menu a:hover{background:var(--paper)}
+.menu a span{color:var(--mu)}
+.burger{border-color:var(--ln);color:var(--ink)}
+header .btn.g,.hero .btn.g{border-color:var(--ln);color:var(--ink);background:#fff}
+header .btn.g:hover,.hero .btn.g:hover{border-color:#BDB8B1}
+.hero{background:#fff;color:var(--ink)}
+.hero::before{background:radial-gradient(circle,rgba(11,12,15,.16) 1px,transparent 1.5px) 0 0/22px 22px;-webkit-mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.85) 45%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.85) 45%,transparent 100%)}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(45% 55% at 85% 10%,rgba(20,194,201,.10),transparent 70%);pointer-events:none}
+.hero .lede{color:var(--mu)}
+.hero .stats{border-top-color:var(--ln)}
+.hero .stats div+div{border-left-color:var(--ln)}
+.hero .stats span{color:var(--mu)}
+@media(max-width:480px){.hero .stats div+div{border-top-color:var(--ln)}}
+footer .logo{color:#fff}
+header:has(.nav.open){background:#fff}
+.logo{gap:8px}
+.lite{background:var(--paper);border:1px solid var(--ln);color:var(--ink)}
+.lite .stops li,.lite.bill div{border-color:var(--ln)}
+.lite .stops ul li{border:0}
+.lite .pin{background:#fff;border-color:var(--ln);color:var(--mu)}
+.lite .stops p,.lite.bill span{color:var(--mu)}
+.lite .stops ul{color:#3A3E45}
+.lite .stops ul li::before{background:#B5B1AB}
+.lite .track{background:linear-gradient(90deg,var(--ln),var(--r))}
+.lite .track i{box-shadow:0 0 0 4px rgba(20,194,201,.25),0 1px 3px rgba(11,12,15,.2)}
+.hero .htext{margin:0 auto;text-align:center;max-width:860px}
+.hero{padding-top:clamp(180px,17vw,240px)}
+@media(max-width:600px){.hero{padding-top:176px}}
+.hero h1{margin:0 auto}.hero .lede{margin-left:auto;margin-right:auto}
+@media(min-width:601px){.hero .ctas{justify-content:center}.hero .stats{max-width:720px;margin-left:auto;margin-right:auto}.hero .stats div{padding:18px 12px 0}}
+.hero .htext{padding-bottom:clamp(56px,6vw,88px)}
+#sources{padding-top:clamp(32px,4vw,56px)}
+.hero::after{display:none}
+.hero h1{font-size:clamp(34px,4.3vw,58px);line-height:1.12}
+.hl{position:relative;display:inline-block;white-space:nowrap;z-index:0}
+.hl::before{content:"";position:absolute;z-index:-1;left:-.08em;right:-.08em;top:48%;bottom:.04em;background:rgba(20,194,201,.32);border-radius:.12em .3em .14em .28em;transform:skewX(-8deg) scaleX(0);transform-origin:left;animation:swipe .8s .3s cubic-bezier(.6,0,.2,1) forwards}
+@keyframes swipe{to{transform:skewX(-8deg) scaleX(1)}}
+@media(prefers-reduced-motion:reduce){.hl::before{animation:none;transform:skewX(-8deg)}}
+/* sources flow graphic */
+.flow{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.95fr) minmax(0,.9fr);gap:clamp(48px,7vw,110px);align-items:center;padding:clamp(28px,4vw,48px);margin-bottom:16px;border-radius:20px;border:1px solid var(--ln);background:radial-gradient(circle,rgba(11,12,15,.09) 1px,transparent 1.5px) 0 0/20px 20px,var(--paper)}
+.flow-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.fl{fill:none;stroke:#D3CEC7;stroke-width:1.5}
+.fl.hot{stroke:var(--r);stroke-width:2}
+.fd{fill:var(--r)}
+.fcol{position:relative;z-index:1;display:grid;gap:10px;align-content:center}
+.flab{font:500 11px "Geist Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:4px}
+.fnode{display:flex;gap:12px;align-items:center;padding:11px 14px;background:#fff;border:1px solid var(--ln);border-radius:14px;box-shadow:0 1px 2px rgba(11,12,15,.04)}
+.fnode i{width:34px;height:34px;border-radius:10px;background:var(--paper);border:1px solid var(--ln);display:grid;place-items:center;color:var(--ink);flex:none}
+.fnode i svg{width:18px;height:18px}
+.fnode b{display:block;font-size:14.5px;font-weight:500;line-height:1.3}
+.fnode span{display:block;font-size:12.5px;color:var(--mu);line-height:1.35}
+.fcard{border-radius:16px;padding:16px 18px}
+.crit{background:#fff;border:1px solid var(--ln);box-shadow:0 18px 36px -22px rgba(11,12,15,.3);display:grid}
+.cr{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:10px 0;font-size:14px}
+.cr+.cr{border-top:1px solid var(--ln)}
+.cr span{color:var(--mu)}
+.cr b{font-weight:500}
+.tk{width:18px;height:18px;border-radius:50%;background:var(--r);display:grid;place-items:center}
+.tk svg{width:10px;height:10px;color:#041416}
+.outc{background:var(--dk);color:#fff;border:1px solid #16181D;box-shadow:0 24px 48px -22px rgba(11,12,15,.55)}
+.nt{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#7FE6EA;margin-bottom:12px}
+.nt em{font-style:normal;color:var(--mu-d);margin-left:auto}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--r);box-shadow:0 0 0 0 rgba(20,194,201,.6);animation:ping 2s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 8px rgba(20,194,201,0)}100%{box-shadow:0 0 0 0 rgba(20,194,201,0)}}
+.outc b{display:block;font-size:17px;font-weight:600;letter-spacing:-.01em}
+.outc p{color:var(--mu-d);font-size:14px;margin-top:2px}
+.one{display:flex;align-items:center;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--bd);font-size:13px;color:#D4D7DC}
+.one svg{width:12px;height:12px;color:var(--r)}
+@media(max-width:900px){.flow{grid-template-columns:minmax(0,1fr);gap:0}.flow-lines{display:none}.fcol+.fcol::before{content:"";display:block;width:2px;height:36px;margin:12px auto;background:linear-gradient(var(--ln),var(--r));border-radius:2px}.src{grid-template-columns:repeat(2,minmax(0,1fr))}.src .flab{grid-column:1/-1}}
+@media(max-width:520px){.src{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.pdot{animation:none}}
+.rpanel{background:var(--dk);border-radius:28px;color:#fff;overflow:hidden;border:1px solid #1A1C22;box-shadow:0 50px 100px -50px rgba(10,11,14,.6)}
+.rfig{position:relative;height:440px}
+.rfig svg{position:absolute;inset:0;width:100%;height:100%}
+.rfig text{font:500 14px Geist,sans-serif;fill:#fff;paint-order:stroke;stroke:var(--dk);stroke-width:4px}
+.rfig text.s{fill:var(--mu-d);font-size:13px}
+.rleg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--bd)}
+.rleg div{padding:22px 24px}
+.rleg div+div{border-left:1px solid var(--bd)}
+.rleg p{color:var(--mu-d);font-size:15px;margin-top:6px}
+@media(max-width:820px){.rfig{height:640px}.rleg{grid-template-columns:minmax(0,1fr)}.rleg div+div{border-left:0;border-top:1px solid var(--bd)}}
+.sel{position:relative;margin-top:10px}
+.sel select{appearance:none;-webkit-appearance:none;width:100%;min-height:48px;padding:0 40px 0 14px;border-radius:12px;border:1px solid var(--bd2);background:var(--dk2);color:#fff;font:500 15px Geist,sans-serif;cursor:pointer}
+.sel select optgroup,.sel select option{background:#13151A;color:#fff}
+.sel svg{position:absolute;right:14px;top:50%;width:10px;height:10px;transform:translateY(-50%);color:var(--mu-d);pointer-events:none}
+.cta{background:#fff;color:var(--ink);padding-top:clamp(24px,3vw,48px)}
+.cta::before{display:none}
+.cta .wrap{background:var(--void);color:#fff;border-radius:28px;padding:clamp(56px,7vw,104px) clamp(24px,5vw,72px);overflow:hidden;box-shadow:0 40px 80px -48px rgba(11,12,15,.55)}
+.cta .wrap::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(255,255,255,.07) 1px,transparent 1.5px) 0 0/22px 22px;-webkit-mask-image:radial-gradient(70% 80% at 50% 50%,#000,transparent);mask-image:radial-gradient(70% 80% at 50% 50%,#000,transparent);pointer-events:none}
+.cta .wrap>*{position:relative}
+.cta .btn.g{border-color:var(--bd2);color:#fff;background:rgba(255,255,255,.04)}
+.logo{font:600 21px Geist,sans-serif;letter-spacing:-.035em;gap:0}
+.logo .ld{color:var(--r)}
+.tabs2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid var(--ln);margin-bottom:28px}
+.tabs2 button{background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;padding:14px 8px;font:500 15px Geist,sans-serif;color:var(--mu);cursor:pointer}
+.tabs2 button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--ink)}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.tile{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;column-gap:14px;align-items:center;padding:16px;border-radius:16px;background:var(--paper);border:1px solid transparent;color:var(--ink);text-decoration:none;transition:background .15s,border-color .15s}
+.tile .ti{grid-row:1/3;width:60px;height:60px;border-radius:14px;background:#fff;display:grid;place-items:center}
+.tile svg{width:40px;height:40px}
+.tile b{font-size:16px;font-weight:500;letter-spacing:-.01em;line-height:1.25;align-self:end}
+.tile span{font-size:13px;color:var(--mu);align-self:start;margin-top:2px}
+.tile:hover{background:#EAF9FA;border-color:rgba(20,194,201,.45)}
+.tile:hover .ti{background:#fff}
+.tile[hidden]{display:none}
+@media(max-width:600px){.hm{display:none}}
+@media(max-width:900px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.tiles{grid-template-columns:minmax(0,1fr);gap:8px}.tile{padding:12px}.tile .ti{width:52px;height:52px}.tile svg{width:34px;height:34px}.tile b{font-size:15px}.tabs2 button{font-size:13.5px;padding:12px 4px}}
+.amt.amt-t{font-size:clamp(30px,3.2vw,40px);letter-spacing:-.03em}
+
+/* premium tiles */
+.tile{grid-template-columns:auto minmax(0,1fr) auto;padding:14px 18px 14px 14px;background:#fff;border:1px solid var(--ln);box-shadow:0 1px 2px rgba(16,24,40,.04),0 1px 0 rgba(255,255,255,.8) inset;transition:transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s,border-color .2s}
+.tile .ti{width:62px;height:62px;border-radius:16px;background:linear-gradient(180deg,#F6FDFD 0%,#E3F6F7 100%);box-shadow:inset 0 0 0 1px rgba(11,105,112,.10),inset 0 1px 0 #fff,0 1px 2px rgba(11,105,112,.08),0 6px 14px -8px rgba(11,105,112,.35);position:relative;overflow:hidden}
+.tile .ti::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(120% 70% at 30% 0%,rgba(255,255,255,.9),rgba(255,255,255,0) 60%);pointer-events:none}
+.tile svg{width:42px;height:42px;position:relative;z-index:1}
+.tile b{font-weight:550;font-size:16px}
+.tile span{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin-top:4px}
+.tile .ta{grid-row:1/3;grid-column:3;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--mu);background:var(--paper);transition:transform .2s,background .2s,color .2s}
+.tile .ta svg{width:14px;height:14px}
+.tile:hover{background:#fff;border-color:rgba(20,194,201,.55);transform:translateY(-2px);box-shadow:0 2px 4px rgba(16,24,40,.04),0 14px 28px -14px rgba(11,105,112,.35)}
+.tile:hover .ta{background:var(--r);color:#fff;transform:translateX(2px)}
+@media(max-width:600px){.tile{padding:12px 14px 12px 12px}.tile .ti{width:54px;height:54px;border-radius:14px}.tile svg{width:34px;height:34px}}
+
+.callnote{margin:18px 0 0;font-size:14.5px;color:var(--mu);text-align:center}
+.callnote a{color:var(--ink);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(20,194,201,.6);padding-bottom:1px;display:inline-flex;align-items:center;gap:4px}
+.callnote a:hover{border-bottom-color:var(--r)}
+.callnote svg{width:12px;height:12px;color:var(--r2)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><linearGradient id="tgL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4FDFD"/><stop offset="1" stop-color="#B4E7EA"/></linearGradient><linearGradient id="tgT" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#52DFE4"/><stop offset="1" stop-color="#0C99A0"/></linearGradient><linearGradient id="tgD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#13828A"/><stop offset="1" stop-color="#09545A"/></linearGradient><radialGradient id="tgS"><stop offset="0" stop-color="#0B5E64" stop-opacity=".28"/><stop offset="1" stop-color="#0B5E64" stop-opacity="0"/></radialGradient></defs>
+  <symbol id="mark" viewBox="0 0 32 32"><circle cx="16" cy="16" r="11" fill="#14C2C9"/></symbol>
+  <symbol id="ok" viewBox="0 0 12 12"><path d="M2.5 6.3 5 8.6 9.6 3.6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="no" viewBox="0 0 10 10"><path d="M2 2l6 6M8 2 2 8" stroke="#8D9099" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="bolt" viewBox="0 0 20 20"><path d="M11 2 4 11.5h5L8 18l7-9.5h-5z" fill="#041416"/></symbol>
+  <symbol id="home" viewBox="0 0 20 20"><path d="M2.5 10 10 3.5l7.5 6.5M5 8.5V17h10V8.5" fill="none" stroke="#041416" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="arr" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<header>
+  <nav class="nav" id="nav" aria-label="Main">
+    <a class="logo" href="#top" aria-label="QuoteOne home">quoteone<span class="ld">.</span></a>
+    <button class="burger" id="burger" aria-expanded="false" aria-label="Open menu"><svg width="18" height="18" viewBox="0 0 20 20"><path d="M3 7h14M3 13h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+    <ul class="links">
+      <li><a href="#pricing">Buy leads</a></li>
+      <li><a href="#industries">Industries</a></li>
+      <li><a href="#platform">Platform</a></li>
+      <li><button id="resBtn" aria-expanded="false" aria-controls="resMenu">Resources <svg class="caret" viewBox="0 0 10 10"><path d="M2 3.5 5 6.5 8 3.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+        <ul class="menu" id="resMenu">
+          <li><a href="#">Blog<span>Guides for growing a trade business</span></a></li>
+          <li><a href="#">Glossary<span>Lead gen terms, explained plainly</span></a></li>
+          <li><a href="#">FAQ<span>Billing, credits and delivery</span></a></li>
+          <li><a href="#roi">ROI calculator<span>What your leads could return</span></a></li>
+          <li><a href="#cap">Lead calculator<span>Set a weekly cap that fits</span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="navcta"><a class="btn g" href="#">Log in</a><a class="btn r" href="#start">Get leads</a></div>
+  </nav>
+</header>
+
+<main id="top">
+<section class="band hero">
+  <div class="wrap hgrid">
+    <div class="htext">
+      <h1><span class="hl">Exclusive</span> leads for Australian trades.</h1>
+      <p class="lede">Verified homeowner enquiries for energy and structural trades, sent to one business only. Choose your jobs, postcodes and weekly cap. We run the ads. You only pay for leads that land.</p>
+      <div class="ctas"><a class="btn r" href="#start">Start getting leads <svg><use href="#arr"/></svg></a><a class="btn g" href="#platform">See the platform</a></div>
+      <p class="callnote">Prefer to talk first? <a href="#start">Book a 10-min call <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+      <div class="stats">
+        <div><b>1 buyer</b><span>per lead, never shared</span></div>
+        <div><b>2 checks</b><span>before you're billed</span></div>
+        <div><b>No lock-in</b><span>pause any time</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="sources">
+  <div class="wrap">
+    <div class="head">
+      <h2>From enquiry to your phone, in seconds</h2>
+      <p class="lede">Every lead travels the same short line: generated by us, checked for spam, matched to you, and delivered to no one else.</p>
+    </div>
+    <div class="rpanel">
+      <div class="rfig" id="rfig"><svg id="rsvg" role="img" aria-label="Routing diagram: three sources feed a spam filter, then your criteria, then you. Failed enquiries are dropped."></svg></div>
+      <div class="rleg">
+        <div><h3>Sources</h3><p>Owned comparison websites, Google and Meta campaigns, and a publisher network we vet and monitor.</p></div>
+        <div><h3>Spam filter</h3><p>Australian carrier phone check and a postcode check against your service list. Fail either and it's dropped.</p></div>
+        <div><h3>Your criteria</h3><p>Matched on job type, postcode and your weekly cap, then sent to you by SMS, email and dashboard.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band paper" id="why">
+  <div class="wrap">
+    <div class="head">
+      <h2>Only pay for real work</h2>
+      <p class="lede">Three rules every lead follows, no exceptions.</p>
+    </div>
+    <div class="three">
+      <div>
+        <div class="vis"><div class="one"><span>1 homeowner</span><i></i><span class="you">1 business</span></div></div>
+        <h3>Exclusive, always</h3><p>No racing other tradies to the phone. Each lead goes to one business and is never resold.</p>
+      </div>
+      <div>
+        <div class="vis"><div class="chk">
+          <div><span class="tick"><svg><use href="#ok"/></svg></span>Live mobile, carrier verified</div>
+          <div><span class="tick"><svg><use href="#ok"/></svg></span>2155 is in your area</div>
+          <div class="no"><span class="x"><svg><use href="#no"/></svg></span>2750 is outside your area, dropped</div>
+        </div></div>
+        <h3>Spam never reaches you</h3><p>Fail either check and the enquiry is dropped before delivery, so you're never charged for it.</p>
+      </div>
+      <div id="cap">
+        <div class="vis"><div class="capbox"><div class="row"><label for="capR">Weekly cap</label><b id="capV">10</b></div><input type="range" class="range" id="capR" min="1" max="40" value="10"></div></div>
+        <h3>You set the pace</h3><p>Choose a weekly cap and you'll never get more leads than you can quote. Pause any time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="example">
+  <div class="wrap ex">
+    <div>
+      <h2>What lands on your phone</h2>
+      <p class="lede">A real homeowner, a real job, and the details you need to quote before you call.</p>
+      <ul class="feat">
+        <li><span class="tick"><svg><use href="#ok"/></svg></span><div><b>Verified contact</b><p>Carrier-checked phone and a postcode inside your area.</p></div></li>
+        <li><span class="tick"><svg><use href="#ok"/></svg></span><div><b>Job details for your trade</b><p>Roof and bill for solar, deck size for decking, pool type for pools.</p></div></li>
+        <li><span class="tick"><svg><use href="#ok"/></svg></span><div><b>Timing</b><p>When they want it done and when to call.</p></div></li>
+      </ul>
+    </div>
+    <div>
+      <article class="lead dark">
+        <div class="top"><b>Solar + Battery</b><span class="pill"><span class="dot"></span>Verified</span></div>
+        <dl>
+          <dt>Name</dt><dd>Daniel Kovac</dd>
+          <dt>Phone</dt><dd class="num">0491 570 156</dd>
+          <dt>Suburb</dt><dd>Kellyville NSW 2155</dd>
+          <dt>Property</dt><dd>Owner-occupied, two-storey, tile roof</dd>
+          <dt>Power bill</dt><dd>About $650 a quarter</dd>
+          <dt>Interested in</dt><dd>6.6kW solar with a 13kWh battery</dd>
+          <dt>Timing</dt><dd>Within 2 months</dd>
+          <dt>Best time</dt><dd>Weekday evenings</dd>
+        </dl>
+        <div class="ft"><span>Received 10:42am</span><b>Sent to you only</b></div>
+      </article>
+      <p class="note">Example lead. Names and numbers are fictional.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band paper" id="compare">
+  <div class="wrap">
+    <div class="head">
+      <h2>Stop paying for clicks</h2>
+      <p class="lede">Ads charge you for attention. Pay per lead charges you only when a homeowner asks for a quote.</p>
+    </div>
+    <div class="vs">
+      <div class="col">
+        <h3>Traditional advertising</h3><p class="sub">You pay for impressions and clicks</p>
+        <div class="fun" aria-label="Illustration: you pay at every stage">
+          <div>Impressions<i class="pay" style="width:100%"></i></div>
+          <div>Clicks<i class="pay" style="width:56%"></i></div>
+          <div>Enquiries<i style="width:18%"></i></div>
+        </div>
+        <ul>
+          <li><span class="x"><svg><use href="#no"/></svg></span>Budget spent whether anyone enquires or not</li>
+          <li><span class="x"><svg><use href="#no"/></svg></span>You build the pages and run the campaigns</li>
+          <li><span class="x"><svg><use href="#no"/></svg></span>Spam and out-of-area forms are yours to sort</li>
+        </ul>
+      </div>
+      <div class="col dark">
+        <h3>QuoteOne</h3><p class="sub">You pay for a potential customer, nothing else</p>
+        <div class="fun" aria-label="Illustration: you only pay at the lead stage">
+          <div>Impressions<i style="width:100%"></i></div>
+          <div>Clicks<i style="width:56%"></i></div>
+          <div>Leads<i class="pay" style="width:18%"></i></div>
+        </div>
+        <ul>
+          <li><span class="tick"><svg><use href="#ok"/></svg></span>Charged only when a verified lead is delivered</li>
+          <li><span class="tick"><svg><use href="#ok"/></svg></span>We run the ads, websites and forms</li>
+          <li><span class="tick"><svg><use href="#ok"/></svg></span>Spam filtered out before billing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="how">
+  <div class="wrap">
+    <div class="head">
+      <h2>Live in an afternoon</h2>
+      <p class="lede">No contracts and no minimum spend. You're only charged when a lead lands.</p>
+    </div>
+    <ol class="steps">
+      <li><h3>Sign up</h3><p>Create your account with your ABN.</p></li>
+      <li><h3>Pick your jobs</h3><p>From solar and batteries to decks and pools.</p></li>
+      <li><h3>Set area and cap</h3><p>Your postcodes and a weekly lead limit.</p></li>
+      <li><h3>Add your card</h3><p>Credit or debit. Your first lead is charged upfront.</p></li>
+      <li><h3>We run the ads</h3><p>Campaigns, websites and forms, handled.</p></li>
+      <li class="hot"><h3>Pay as leads arrive</h3><p>Each lead is charged as it's delivered.</p></li>
+    </ol>
+    <div class="bill lite">
+      <div><b>First lead upfront</b><span>Charged when you sign up</span></div>
+      <div><b>Charged on delivery</b><span>Every lead after that, automatically</span></div>
+      <div><b>Weekly summary</b><span>Invoice and transactions by email</span></div>
+      <div><b>Failed payment pauses</b><span>Delivery stops until it's fixed</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band paper" id="pricing">
+  <div class="wrap">
+    <div class="head">
+      <h2>Priced per lead type</h2>
+      <p class="lede">Each lead type has its own price, based on the size of the job. You see it before you switch a lead type on, and it never changes without notice.</p>
+    </div>
+    <div class="price">
+      <div class="tier dark">
+        <h3>Energy</h3>
+        <div class="amt amt-t">Per lead type</div>
+        <p class="sub">For solar, storage and electrification installers</p>
+        <ul class="inc"><li>Solar + Battery</li><li>Batteries</li><li>Heat pumps</li><li>EV chargers</li><li>HVAC</li></ul>
+        <a class="btn r" href="#start">Buy energy leads</a>
+      </div>
+      <div class="tier">
+        <h3>Structural</h3>
+        <div class="amt amt-t">Per lead type</div>
+        <p class="sub">For builders, renovators, roofers and landscapers</p>
+        <ul class="inc"><li>Roofing</li><li>Renovations</li><li>Decking &amp; pergolas</li><li>Modular homes</li><li>Pools</li><li>Landscaping</li><li>Exterior painting</li></ul>
+        <a class="btn k" href="#start">Buy structural leads</a>
+      </div>
+      <div class="tier">
+        <h3>Custom</h3>
+        <div class="amt amt-t">Tailored</div>
+        <p class="sub">For multi-region teams and higher volumes</p>
+        <ul class="inc"><li>Volume pricing</li><li>Your own qualifying questions</li><li>Dedicated account manager</li></ul>
+        <a class="btn o" href="#start">Talk to us</a>
+      </div>
+    </div>
+    <p class="note">Every lead type&rsquo;s price is shown in your dashboard before you go live. Prices in AUD, excluding GST.</p>
+  </div>
+</section>
+
+<section class="band" id="industries">
+  <div class="wrap">
+    <div class="head">
+      <h2>Industries we serve</h2>
+      <p class="lede">Two categories, twelve lead types. Turn on one, a few, or all of them.</p>
+    </div>
+    <div class="tabs2" role="tablist" aria-label="Filter industries">
+      <button type="button" role="tab" aria-selected="true" data-f="all">All</button>
+      <button type="button" role="tab" aria-selected="false" data-f="e">Energy</button>
+      <button type="button" role="tab" aria-selected="false" data-f="s">Structural</button>
+    </div>
+    <div class="tiles" id="tiles"><a class="tile" href="#start" data-cat="e"><i class="ti"><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="43.5" rx="17" ry="2.4" fill="url(#tgS)"/><path d="M17 26v10M12 36.5h10" fill="none" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M6 26 12 10h22l-6 16z" fill="url(#tgT)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M12 10h7.3l-3 8H9z" fill="#fff" fill-opacity=".28"/><path d="M9 18h22M19.3 10l-6 16M26.7 10l-6 16" stroke="#fff" stroke-opacity=".6" stroke-width="1.1"/><path d="M22 36.5h9" fill="none" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="34.5" y="22.5" width="4" height="2.2" rx=".8" fill="url(#tgD)"/><rect x="31" y="24" width="11" height="17.5" rx="2.6" fill="url(#tgL)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="33" y="31" width="7" height="8.5" rx="1.3" fill="url(#tgT)"/><path d="M37.2 25.6l-2.4 3.2h2.2l-1.6 2.4" fill="none" stroke="#0B5E64" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></i><b>Solar + Battery</b><span>Energy</span><em class="ta" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></em></a><a class="tile" href="#start" data-cat="e"><i class="ti"><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="43.5" rx="17" ry="2.4" fill="url(#tgS)"/><rect x="14" y="4.5" width="20" height="37" rx="5" fill="url(#tgL)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="17" y="21.5" width="14" height="17" rx="3" fill="url(#tgT)"/><path d="M17 26h14" stroke="#fff" stroke-opacity=".45" stroke-width="1"/><rect x="16.2" y="7" width="2.6" height="12" rx="1.3" fill="#fff" fill-opacity=".75"/><path d="M25.8 9.5 21 16.2h3.6l-1.4 4.8 5-6.8h-3.6z" fill="url(#tgD)"/><circle cx="24" cy="44" r="0" fill="none"/></svg></i><b>Batteries</b><span>Energy</span><em class="ta" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></em></a><a class="tile" href="#start" data-cat="e"><i class="ti"><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="43.5" rx="17" ry="2.4" fill="url(#tgS)"/><rect x="9" y="35" width="5" height="5.5" rx="1" fill="url(#tgD)"/><rect x="34" y="35" width="5" height="5.5" rx="1" fill="url(#tgD)"/><rect x="5" y="10.5" width="38" height="26" rx="4.5" fill="url(#tgL)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M8.5 13.5h31" stroke="#fff" stroke-opacity=".8" stroke-width="1.6" stroke-linecap="round"/><circle cx="18" cy="23.5" r="9.2" fill="#fff" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><g fill="url(#tgT)"><path d="M18 23.5c-.6-4.4 1.6-7.3 4.4-6.6 2 .6 1.6 3.6-.8 5.2-1.1.7-2.4 1.1-3.6 1.4z"/><path d="M18 23.5c-.6-4.4 1.6-7.3 4.4-6.6 2 .6 1.6 3.6-.8 5.2-1.1.7-2.4 1.1-3.6 1.4z" transform="rotate(120 18 23.5)"/><path d="M18 23.5c-.6-4.4 1.6-7.3 4.4-6.6 2 .6 1.6 3.6-.8 5.2-1.1.7-2.4 1.1-3.6 1.4z" transform="rotate(240 18 23.5)"/></g><circle cx="18" cy="23.5" r="1.9" fill="url(#tgD)"/><path d="M31.5 17.5h7.5M31.5 21.5h7.5M31.5 25.5h7.5M31.5 29.5h7.5" fill="none" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></i><b>Heat pumps</b><span>Energy</span><em class="ta" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></em></a><a class="tile" href="#start" data-cat="e"><i class="ti"><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="43.5" rx="17" ry="2.4" fill="url(#tgS)"/><path d="M27 21h4.5a4.5 4.5 0 0 1 4.5 4.5V33" fill="none" stroke="#0B5E64" stroke-width="2.2" stroke-linecap="round"/><rect x="10" y="4.5" width="17" height="36" rx="4" fill="url(#tgL)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="12.4" y="6.5" width="2.4" height="30" rx="1.2" fill="#fff" fill-opacity=".7"/><rect x="13.5" y="9" width="10" height="9" rx="1.8" fill="url(#tgT)"/><path d="M19.4 10.8l-2.4 3.1h2.2l-1.5 2.4" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18.5" cy="27" r="3.2" fill="url(#tgD)"/><circle cx="18.5" cy="27" r="1.2" fill="#fff" fill-opacity=".7"/><rect x="32.5" y="32.5" width="7" height="8.5" rx="2" fill="url(#tgT)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M34.8 41v2M37.2 41v2" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="8" y="40.2" width="21" height="2.6" rx="1.3" fill="url(#tgD)"/></svg></i><b>EV chargers</b><span>Energy</span><em class="ta" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></em></a><a class="tile" href="#start" data-cat="e"><i class="ti"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="4" y="8.5" width="40" height="16" rx="5" fill="url(#tgL)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M8 11.5h22" stroke="#fff" stroke-opacity=".85" stroke-width="1.8" stroke-linecap="round"/><rect x="7.5" y="19.5" width="33" height="3" rx="1.5" fill="url(#tgT)"/><path d="M29.5 14.5h3.5" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="37" cy="14.5" r="1.4" fill="url(#tgD)"/><path d="M14 29c-1.6 2.2 1.6 3.8 0 6s1.6 3.8 0 6M24 29c-1.6 2.2 1.6 3.8 0 6s1.6 3.8 0 6M34 29c-1.6 2.2 1.6 3.8 0 6s1.6 3.8 0 6" fill="none" stroke="url(#tgT)" stroke-width="2.2" stroke-linecap="round"/></svg></i><b>HVAC</b><span>Energy</span><em class="ta" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></em></a><a class="tile" href="#start" data-cat="s"><i class="ti"><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="43.5" rx="17" ry="2.4" fill="url(#tgS)"/><rect x="31.5" y="8" width="5.5" height="10" rx="1" fill="url(#tgD)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M11 24 24 13l13 11v17.5H11z" fill="url(#tgL)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M20 41.5V34a4 4 0 0 1 8 0v7.5z" fill="url(#tgD)"/><path d="M3.5 25.5 24 7l20.5 18.5-3.8 1L24 11.6 7.3 26.5z" fill="url(#tgT)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M9 21.5 24 8.6" stroke="#fff" stroke-opacity=".55" stroke-width="1.4" stroke-linecap="round"/><path d="M8 41.5h32" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></i><b>Roofing</b><span>Structural</span><em class="ta" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></em></a><a class="tile" href="#start" data-cat="s"><i class="ti"><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="43.5" rx="17" ry="2.4" fill="url(#tgS)"/><rect x="5" y="22" width="25" height="19.5" rx="2" fill="url(#tgL)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M5 28.5h25M5 35h25M13 22v6.5M22 22v6.5M9 28.5V35M17.5 28.5V35M26 28.5V35M13 35v6.5M22 35v6.5" stroke="#0B5E64" stroke-opacity=".55" stroke-width="1.1"/><path d="M23 31 37.5 16.5" stroke="url(#tgD)" stroke-width="3.2" stroke-linecap="round"/><g transform="rotate(45 38 14.5)"><rect x="31" y="11" width="14" height="7" rx="1.8" fill="url(#tgT)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="32.5" y="12.3" width="11" height="1.6" rx=".8" fill="#fff" fill-opacity=".6"/></g></svg></i><b>Renovations</b><span>Structural</span><em class="ta" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></em></a><a class="tile" href="#start" data-cat="s"><i class="ti"><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="43.5" rx="17" ry="2.4" fill="url(#tgS)"/><rect x="10" y="12" width="3.6" height="25" rx="1" fill="url(#tgD)"/><rect x="34.4" y="12" width="3.6" height="25" rx="1" fill="url(#tgD)"/><path d="M17 12.5v3.5M24 12.5v3.5M31 12.5v3.5" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="5" y="8.5" width="38" height="4.5" rx="1.8" fill="url(#tgT)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M7.5 10h33" stroke="#fff" stroke-opacity=".6" stroke-width="1" stroke-linecap="round"/><path d="M4 36h40l-3 6H7z" fill="url(#tgT)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M15 36l-1 6M24 36v6M33 36l1 6" stroke="#fff" stroke-opacity=".55" stroke-width="1.1"/></svg></i><b>Decking &amp; Pergolas</b><span>Structural</span><em class="ta" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></em></a><a class="tile" href="#start" data-cat="s"><i class="ti"><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="43.5" rx="17" ry="2.4" fill="url(#tgS)"/><path d="M24 3.5 16 10.5M24 3.5l8 7" fill="none" stroke="#0B5E64" stroke-width="1.2" stroke-linecap="round"/><circle cx="24" cy="3.5" r="1.4" fill="url(#tgD)"/><rect x="14" y="10.5" width="20" height="11" rx="1.8" fill="url(#tgT)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M16.5 13h15" stroke="#fff" stroke-opacity=".6" stroke-width="1.2" stroke-linecap="round"/><rect x="4.5" y="28" width="19" height="13.5" rx="1.8" fill="url(#tgL)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="24.5" y="28" width="19" height="13.5" rx="1.8" fill="url(#tgL)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="8.5" y="31.5" width="5.5" height="4.5" rx="1" fill="url(#tgT)"/><rect x="34" y="31.5" width="5.5" height="4.5" rx="1" fill="url(#tgT)"/><path d="M16.5 41.5v-7h3.5v7M28 41.5v-7h3.5v7" fill="url(#tgD)"/></svg></i><b>Modular Homes</b><span>Structural</span><em class="ta" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></em></a><a class="tile" href="#start" data-cat="s"><i class="ti"><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="43.5" rx="17" ry="2.4" fill="url(#tgS)"/><rect x="4" y="19.5" width="40" height="21.5" rx="6.5" fill="url(#tgT)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="7" y="22.5" width="34" height="15.5" rx="4.2" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.1"/><path d="M10 29c2.5-1.6 4.5 1.6 7 0s4.5-1.6 7 0 4.5 1.6 7 0M10 34c2.5-1.6 4.5 1.6 7 0s4.5-1.6 7 0 4.5 1.6 7 0" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><path d="M31 26V11a3 3 0 0 1 6 0M37 26V11a3 3 0 0 1 6 0M31 15h6M31 20.5h6" fill="none" stroke="#0B5E64" stroke-width="1.8" stroke-linecap="round"/></svg></i><b>Pools</b><span>Structural</span><em class="ta" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></em></a><a class="tile" href="#start" data-cat="s"><i class="ti"><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="43.5" rx="17" ry="2.4" fill="url(#tgS)"/><path d="M3.5 41.5h41" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M17 23v18.5M17 31l-4.5-3.5M17 28l4-3" fill="none" stroke="url(#tgD)" stroke-width="2.4" stroke-linecap="round"/><circle cx="17" cy="16" r="11" fill="url(#tgT)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="13.5" cy="12" r="4.5" fill="#fff" fill-opacity=".3"/><path d="M27 41.5a8.5 8.5 0 0 1 17 0z" fill="url(#tgL)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M31 37a4.5 4.5 0 0 1 4-3" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg></i><b>Landscaping</b><span>Structural</span><em class="ta" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></em></a><a class="tile" href="#start" data-cat="s"><i class="ti"><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="43.5" rx="17" ry="2.4" fill="url(#tgS)"/><path d="M35 11.5h4.5V22H23v6" fill="none" stroke="#0B5E64" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="6.5" y="5.5" width="29" height="12" rx="4" fill="url(#tgT)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="9.5" y="7.6" width="22" height="2" rx="1" fill="#fff" fill-opacity=".6"/><path d="M11 17.5v4a1.6 1.6 0 0 0 3.2 0v-4" fill="url(#tgT)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="20" y="28" width="6" height="14.5" rx="2.6" fill="url(#tgD)" stroke="#0B5E64" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="21.6" y="30" width="1.4" height="9" rx=".7" fill="#fff" fill-opacity=".5"/></svg></i><b>Exterior Painting</b><span>Structural</span><em class="ta" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></em></a></div>
+  </div>
+</section>
+
+<section class="band paper" id="roi">
+  <div class="wrap">
+    <div class="head">
+      <h2>Run your numbers</h2>
+      <p class="lede">Your close rate and average job value, a week of leads, and what it could return. Your numbers, not a promise.</p>
+    </div>
+    <div class="calc dark dkr">
+      <div class="ins">
+        <div class="f"><label for="rType">Lead type</label><div class="sel"><select id="rType"><optgroup label="Energy"><option value="14000" selected>Solar + Battery</option><option value="11000">Batteries</option><option value="4500">Heat pumps</option><option value="2000">EV chargers</option><option value="9000">HVAC</option></optgroup><optgroup label="Structural"><option value="18000">Roofing</option><option value="60000">Renovations</option><option value="22000">Decking &amp; Pergolas</option><option value="250000">Modular Homes</option><option value="70000">Pools</option><option value="25000">Landscaping</option><option value="9000">Exterior Painting</option></optgroup></select><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div></div>
+        <div class="f"><label for="rLeads">Leads per week <b id="vLeads">10</b></label><input type="range" class="range" id="rLeads" min="1" max="40" value="10"></div>
+        <div class="f"><label for="rClose">Close rate <b id="vClose">20%</b></label><input type="range" class="range" id="rClose" min="5" max="60" value="20"></div>
+        <div class="f"><label for="rPrice">Price per lead</label><input type="number" id="rPrice" min="1" step="1" value="98" inputmode="numeric"></div>
+        <div class="f"><label for="rJob">Average job value</label><input type="number" id="rJob" min="500" step="500" value="14000" inputmode="numeric"></div>
+      </div>
+      <div class="outs">
+        <span class="k">Estimated weekly revenue</span>
+        <div class="big" id="oRev">$24,000</div>
+        <div class="bars">
+          <div><span>Revenue</span><i><span id="bRev" style="width:100%;background:var(--r)"></span></i><b id="lRev" class="num">$24,000</b></div>
+          <div><span>Lead spend</span><i><span id="bSp" style="width:4%;background:#fff"></span></i><b id="lSp" class="num">$980</b></div>
+        </div>
+        <div class="kv">
+          <div><span>Jobs won</span><b id="oJobs">2</b></div>
+          <div><span>Cost per job</span><b id="oCpj">$490</b></div>
+          <div><span>Return</span><b id="oX">24.5x</b></div>
+        </div>
+      </div>
+    </div>
+    <p class="note">Lead prices and job values are examples only. Change them to match your lead type and business.</p>
+  </div>
+</section>
+
+<section class="band" id="platform">
+  <div class="wrap">
+    <div class="head">
+      <h2>Everything in one place</h2>
+      <p class="lede">Leads the moment they land, spend against your cap, your postcodes, and a switch to pause. Try it.</p>
+    </div>
+    <div class="app dark">
+      <div class="abar"><div class="dots"><i></i><i></i><i></i></div><div class="kbar"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Search leads, suburbs, invoices</span><kbd>⌘K</kbd></div></div>
+      <div class="abody">
+        <div class="side" role="tablist" aria-label="Dashboard sections">
+          <button role="tab" id="t-leads" aria-selected="true" aria-controls="v-leads">Leads</button>
+          <button role="tab" id="t-areas" aria-selected="false" aria-controls="v-areas">Areas</button>
+          <button role="tab" id="t-bill" aria-selected="false" aria-controls="v-bill">Billing</button>
+        </div>
+        <div class="pane" id="v-leads" role="tabpanel" aria-labelledby="t-leads">
+          <div class="kpis">
+            <div class="kpi"><span>Leads this week</span><b>7 of 10</b><div class="meter"><i style="width:70%"></i></div></div>
+            <div class="kpi"><span>Spent this week</span><b class="num">$645</b></div>
+            <div class="kpi"><span>Quotes sent</span><b>4</b></div>
+            <div class="kpi"><span>Jobs won</span><b>2</b></div>
+          </div>
+          <div class="tw"><table>
+            <thead><tr><th>Received</th><th>Homeowner</th><th>Suburb</th><th>Job</th><th>Status</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table></div>
+          <div class="row2"><span id="delivTxt">Delivery is on. New leads arrive by SMS and email.</span><label class="sw" for="deliv"><span id="delivLbl">On</span><input type="checkbox" id="deliv" checked></label></div>
+        </div>
+        <div class="pane hid" id="v-areas" role="tabpanel" aria-labelledby="t-areas">
+          <div><h3>Service postcodes</h3><p style="color:var(--mu-d);font-size:14px;margin-top:4px">Leads outside these postcodes are dropped before billing.</p></div>
+          <div class="pcs" id="pcs"></div>
+          <div class="addpc"><input id="pcIn" inputmode="numeric" maxlength="4" placeholder="Add a postcode, e.g. 2157" aria-label="Postcode"><button class="btn r" id="pcAdd" type="button">Add</button></div>
+          <div class="err" id="pcErr" aria-live="polite"></div>
+        </div>
+        <div class="pane hid" id="v-bill" role="tabpanel" aria-labelledby="t-bill">
+          <div class="kpis">
+            <div class="kpi"><span>Card on file</span><b style="font-size:18px">Visa ending 4242</b></div>
+            <div class="kpi"><span>This week</span><b class="num">$645</b></div>
+            <div class="kpi"><span>Leads billed</span><b>7</b></div>
+            <div class="kpi"><span>Next summary</span><b style="font-size:18px">Mon 30 Nov</b></div>
+          </div>
+          <div class="tw"><table>
+            <thead><tr><th>Date</th><th>Description</th><th>Status</th><th class="r">Amount</th></tr></thead>
+            <tbody id="bills"></tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+    <p class="note">Interactive example with sample data.</p>
+  </div>
+</section>
+
+<section class="band cta" id="start">
+  <div class="wrap">
+    <h2>Your first exclusive lead, this week.</h2>
+    <p>Choose your jobs and postcodes, set a cap, add a card. Only pay for verified homeowners who want a quote.</p>
+    <div class="ctas" style="justify-content:center;margin-top:10px"><a class="btn r" href="#">Create account <svg><use href="#arr"/></svg></a><a class="btn g" href="#">Book a 10-min call</a></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="fb"><a class="logo" href="#top" aria-label="QuoteOne home">quoteone<span class="ld">.</span></a><p>Exclusive, verified homeowner leads for Australian energy and structural trades.</p></div>
+      <div><h4>Product</h4><ul><li><a href="#pricing">Buy leads</a></li><li><a href="#industries">Industries</a></li><li><a href="#platform">Platform</a></li><li><a href="#roi">ROI calculator</a></li></ul></div>
+      <div><h4>Legal</h4><ul><li><a href="#">Billable lead guidelines</a></li><li><a href="#">Terms of service</a></li><li><a href="#">Privacy policy</a></li><li><a href="#">Compliance</a></li></ul></div>
+      <div><h4>Contact</h4><ul><li><a href="mailto:hello@quoteone.com.au">hello@quoteone.com.au</a></li><li><a href="tel:+61255504182">(02) 5550 4182</a></li><li><a href="#">Facebook</a></li><li><a href="#">Instagram</a></li><li><a href="#">LinkedIn</a></li></ul></div>
+    </div>
+    <svg class="wm" viewBox="0 0 900 170" aria-hidden="true"><defs><linearGradient id="wmg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22252C"/><stop offset="1" stop-color="#07080A"/></linearGradient></defs><text x="0" y="150" textLength="900" lengthAdjust="spacingAndGlyphs" fill="url(#wmg)" font-family="Geist,sans-serif" font-weight="700" font-size="190">quoteone<tspan fill="#14C2C9" fill-opacity=".3">.</tspan></text></svg>
+    <div class="legal"><span>© 2026 QuoteOne. All rights reserved.</span><span>Contact details shown are placeholders.</span></div>
+  </div>
+</footer>
+
+<script>
+{
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const aud=n=>'$'+Math.round(n).toLocaleString('en-AU');
+const NS='http://www.w3.org/2000/svg';
+
+/* nav */
+const nav=$('#nav'),burger=$('#burger'),rb=$('#resBtn'),rm=$('#resMenu');
+burger.addEventListener('click',()=>{const o=nav.classList.toggle('open');burger.setAttribute('aria-expanded',o)});
+const closeMenu=()=>{rm.classList.remove('open');rb.setAttribute('aria-expanded',false)};
+rb.addEventListener('click',e=>{e.stopPropagation();const o=rm.classList.toggle('open');rb.setAttribute('aria-expanded',o)});
+document.addEventListener('click',e=>{if(!rm.contains(e.target))closeMenu()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+nav.querySelectorAll('.links a,.navcta a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');burger.setAttribute('aria-expanded',false);closeMenu()}));
+
+
+
+/* ranges */
+const fill=r=>r.style.setProperty('--p',((r.value-r.min)/(r.max-r.min)*100)+'%');
+const capR=$('#capR');const capU=()=>{fill(capR);$('#capV').textContent=capR.value};capR.addEventListener('input',capU);capU();
+
+/* industries */
+const E=['Solar + Battery','Batteries','Heat pumps','EV chargers','HVAC'],S=['Roofing','Renovations','Decking &amp; pergolas','Modular homes','Pools','Landscaping','Exterior painting'];
+const li=j=>`<li>${j}<span>Exclusive</span></li>`;
+
+
+/* roi */
+const rL=$('#rLeads'),rC=$('#rClose'),rJ=$('#rJob');
+const roi=()=>{fill(rL);fill(rC);
+  const l=+rL.value,c=+rC.value/100,j=Math.max(0,+rJ.value||0),sp=l*(Math.max(0,+document.getElementById('rPrice').value||0)),jw=l*c,rev=jw*j,mx=Math.max(rev,sp,1);
+  $('#vLeads').textContent=l;$('#vClose').textContent=rC.value+'%';
+  $('#oRev').textContent=aud(rev);$('#lRev').textContent=aud(rev);$('#lSp').textContent=aud(sp);
+  $('#bRev').style.width=(rev/mx*100)+'%';$('#bSp').style.width=Math.max(1.5,sp/mx*100)+'%';
+  $('#oJobs').textContent=String(Math.round(jw*10)/10);
+  $('#oCpj').textContent=jw>0?aud(sp/jw):'–';
+  $('#oX').textContent=sp>0?(Math.round(rev/sp*10)/10)+'x':'–';
+};
+[rL,rC,rJ].forEach(e=>e.addEventListener('input',roi));
+$('#rType').addEventListener('change',e=>{rJ.value=e.target.value;roi()});document.getElementById('rPrice').addEventListener('input',roi);
+roi();
+
+/* platform */
+const rows=[['Today 10:42am','Daniel K.','Kellyville','Solar + Battery','New'],['Today 8:15am','Hannah M.','Castle Hill','Battery','Contacted'],['Mon 4:03pm','Mark T.','Rouse Hill','EV charger','Quoted'],['Mon 11:20am','Leanne W.','Baulkham Hills','Heat pump','Won'],['Sun 6:48pm','Tom H.','Glenhaven','Solar + Battery','Quoted'],['Sun 9:12am','Grace L.','Bella Vista','HVAC','Won'],['Sat 2:30pm','Ahmed R.','Kellyville','Battery','Contacted']];
+const cls={New:'new',Won:'won'};
+$('#rows').innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td><span class="st ${cls[r[4]]||''}">${r[4]}</span></td></tr>`).join('');
+const PR={'Solar + Battery':120,'Battery':95,'EV charger':60,'Heat pump':70,'HVAC':85};const tot=rows.reduce((a,r)=>a+(PR[r[3]]||90),0);
+$('#bills').innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td>Lead, ${r[3]}, ${r[2]}</td><td><span class="st won">Paid</span></td><td class="r num">$${(PR[r[3]]||90).toFixed(2)}</td></tr>`).join('')+`<tr><td></td><td>Week to date</td><td></td><td class="r num">$${tot.toFixed(2)}</td></tr>`;
+const tabs=$$('.side button');
+tabs.forEach(t=>t.addEventListener('click',()=>tabs.forEach(x=>{const on=x===t;x.setAttribute('aria-selected',on);$('#'+x.getAttribute('aria-controls')).classList.toggle('hid',!on)})));
+const sw=$('#deliv');
+sw.addEventListener('change',()=>{$('#delivLbl').textContent=sw.checked?'On':'Paused';$('#delivTxt').textContent=sw.checked?'Delivery is on. New leads arrive by SMS and email.':'Delivery is paused. You won’t receive or be billed for new leads.'});
+let pcs=['2153','2154','2155','2156','2765'];
+const pcR=()=>{$('#pcs').innerHTML=pcs.map(p=>`<button type="button" data-p="${p}" aria-label="Remove ${p}">${p}<span>×</span></button>`).join('')};
+$('#pcs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;pcs=pcs.filter(p=>p!==b.dataset.p);pcR()});
+const addPc=()=>{const v=$('#pcIn').value.trim();
+  if(!/^\d{4}$/.test(v)){$('#pcErr').textContent='Enter a 4-digit Australian postcode.';return}
+  if(pcs.includes(v)){$('#pcErr').textContent=v+' is already in your list.';return}
+  pcs.push(v);pcs.sort();pcR();$('#pcIn').value='';$('#pcErr').textContent=''};
+$('#pcAdd').addEventListener('click',addPc);
+$('#pcIn').addEventListener('keydown',e=>{if(e.key==='Enter')addPc()});
+pcR();
+}
+
+
+
+/* router */
+(()=>{const NS='http://www.w3.org/2000/svg',still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const rfig=document.getElementById('rfig'),rsvg=document.getElementById('rsvg');
+let R={paths:{},run:[]};
+const drawRouter=()=>{
+  const W=rfig.clientWidth,H=rfig.clientHeight;if(!W||!H)return;
+  const v=W<640;
+  const N=v?{
+    s0:[W*.18,H*.09],s1:[W*.5,H*.09],s2:[W*.82,H*.09],f:[W*.5,H*.36],c:[W*.5,H*.6],y:[W*.5,H*.86],d:[W*.82,H*.48]
+  }:{
+    s0:[W*.11,H*.2],s1:[W*.11,H*.5],s2:[W*.11,H*.8],f:[W*.42,H*.5],c:[W*.66,H*.5],y:[W*.89,H*.5],d:[W*.42,H*.86]
+  };
+  const bw=v?Math.min(W*.3,140):Math.min(176,W*.17),bh=54,mw=v?Math.min(W*.6,240):Math.min(190,W*.19);
+  const lab={s0:v?'Owned sites':'Owned websites',s1:v?'Google & Meta':'Google & Meta ads',s2:v?'Publishers':'Publisher network',f:'Spam filter',c:'Your criteria',y:'You',d:'Dropped'};
+  const sub={f:'Carrier + postcode',c:'Job, area, cap',y:'SMS · email · app',d:'Never billed'};
+  const wOf=k=>k[0]==='s'?bw:(k==='d'?(v?Math.min(W*.3,130):120):mw);
+  const edge=(k,side)=>{const [x,y]=N[k],w=wOf(k);return side==='r'?[x+w/2,y]:side==='l'?[x-w/2,y]:side==='b'?[x,y+bh/2]:[x,y-bh/2]};
+  const cub=(a,b,vert)=>vert?`M${a[0]},${a[1]} C${a[0]},${(a[1]+b[1])/2} ${b[0]},${(a[1]+b[1])/2} ${b[0]},${b[1]}`:`M${a[0]},${a[1]} C${(a[0]+b[0])/2},${a[1]} ${(a[0]+b[0])/2},${b[1]} ${b[0]},${b[1]}`;
+  const P={};
+  ['s0','s1','s2'].forEach(k=>P[k]=v?cub(edge(k,'b'),edge('f','t'),1):cub(edge(k,'r'),edge('f','l')));
+  P.fc=v?cub(edge('f','b'),edge('c','t'),1):cub(edge('f','r'),edge('c','l'));
+  P.cy=v?cub(edge('c','b'),edge('y','t'),1):cub(edge('c','r'),edge('y','l'));
+  P.fd=v?cub(edge('f','r'),edge('d','t'),1):cub(edge('f','b'),edge('d','t'),1);
+  let s=`<defs><radialGradient id="rp"><stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#7FE6EA"/><stop offset="1" stop-color="#14C2C9" stop-opacity="0"/></radialGradient><radialGradient id="gp"><stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#8A909B"/><stop offset="1" stop-color="#8A909B" stop-opacity="0"/></radialGradient></defs>`;
+  for(const k in P){const main=k==='fc'||k==='cy';s+=`<path id="p-${k}" d="${P[k]}" fill="none" stroke="${k==='fd'?'#3A3F49':main?'#14C2C9':'#3A3F49'}" stroke-width="${main?2.5:1.6}" ${k==='fd'?'stroke-dasharray="4 6"':''} opacity="${main?.9:1}"/>`}
+  for(const k in N){const [x,y]=N[k],w=wOf(k),hot=k==='y',mid=k==='f'||k==='c',drop=k==='d';
+    s+=`<rect x="${x-w/2}" y="${y-bh/2}" width="${w}" height="${bh}" rx="14" fill="${hot?'#14C2C9':mid?'#1C1F26':drop?'#0C0D11':'#13151A'}" stroke="${hot?'#7FE6EA':drop?'#3A3F49':'rgba(255,255,255,.14)'}" ${drop?'stroke-dasharray="4 4"':''}/>`;
+    const two=sub[k]&&!(v&&k[0]==='s');
+    s+=`<text x="${x}" y="${two?y-3:y+5}" text-anchor="middle" style="stroke:${hot?'#14C2C9':'#13151A'};fill:${hot?'#041416':''}">${lab[k]}</text>`;
+    if(two)s+=`<text class="s" x="${x}" y="${y+16}" text-anchor="middle" style="stroke:${hot?'#14C2C9':'#13151A'};fill:${hot?'#0A4B50':''}">${sub[k]}</text>`;
+  }
+  s+=`<g id="rpk"></g>`;
+  rsvg.innerHTML=s;
+  R.paths={};for(const k in P)R.paths[k]=rsvg.querySelector('#p-'+k);
+  R.g=rsvg.querySelector('#rpk');R.run=[];
+};
+const spawn=()=>{
+  if(!R.g)return;
+  const src=['s0','s1','s2'][Math.floor(Math.random()*3)],bad=Math.random()<.28;
+  const c=document.createElementNS(NS,'circle');c.setAttribute('r',9);c.setAttribute('fill','url(#rp)');R.g.appendChild(c);
+  R.run.push({c,seq:bad?[src,'fd']:[src,'fc','cy'],i:0,u:0,bad});
+};
+const ro2=new ResizeObserver(drawRouter);ro2.observe(rfig);
+let rl=0,acc=0;
+const rloop=t=>{const dt=rl?Math.min(.05,(t-rl)/1000):0;rl=t;acc+=dt;if(acc>.55){acc=0;spawn()}
+  R.run=R.run.filter(p=>{const path=R.paths[p.seq[p.i]];if(!path){p.c.remove();return false}
+    p.u+=dt/(p.seq[p.i]==='fd'?.9:1.1);
+    if(p.u>=1){p.u=0;p.i++;if(p.i===1&&p.bad)p.c.setAttribute('fill','url(#gp)');if(p.i>=p.seq.length){p.c.remove();return false}}
+    const pa=R.paths[p.seq[p.i]],L=pa.getTotalLength(),pt=pa.getPointAtLength(L*p.u);p.c.setAttribute('cx',pt.x);p.c.setAttribute('cy',pt.y);return true});
+  requestAnimationFrame(rloop)};
+if(!still)requestAnimationFrame(rloop);
+})();
+
+/* industry tiles */
+document.querySelectorAll('.tabs2 button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tabs2 button').forEach(x=>x.setAttribute('aria-selected',x===b));const f=b.dataset.f;document.querySelectorAll('#tiles .tile').forEach(t=>t.hidden=!(f==='all'||t.dataset.cat===f))}));
+</script>
+</body>
+</html>
