@@ -2,7 +2,7 @@ window.APP_CONFIG = {
   "supabaseUrl": "https://feioouacukcquatpaeft.supabase.co",
   "supabaseKey": "sb_publishable_UUOztGGBhxu-gDTYXM6cPA_Tykb4Kye",
   "stripeKey": null,
-  "vapidPublicKey": null,
+  "vapidPublicKey": "BLOxGJvlNPnXcd-XqUMgM7Mo0ptSwkNyaBaZdYHrsKLmYLu2ZJZ8wzdam_96Nv2k9gL7-bOlfmtTVmisgkc6ldo",
   "brand": {
     "name": "QuoteLeads Pay Per Lead",
     "wordmark": "QuoteLeads",

@@ -10,78 +10,134 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/theme.css?v=202611240648">
-<link rel="stylesheet" href="/assets/base.css?v=202611240648">
+<link rel="stylesheet" href="/assets/theme.css?v=202611240910">
+<link rel="stylesheet" href="/assets/base.css?v=202611240910">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="/config.js?v=202611240648"></script>
+<script src="/config.js?v=202611240910"></script>
 
 <title>Start getting leads · QuoteLeads Pay Per Lead</title>
 <script src="https://js.stripe.com/v3/"></script>
 </head>
-<body>
-<div class="auth" style="align-items:start">
-  <div class="auth-card" style="max-width:620px;margin-top:24px">
-    <div class="logo" data-logo></div>
+<body class="order-page">
+<header class="pub-head">
+  <div class="pub-wrap">
+    <a class="logo" href="/" data-logo aria-label="QuoteLeads Pay Per Lead home"><img src="/brand/logo-dark.png" alt="QuoteLeads"><span class="product">Pay Per Lead</span></a>
+    <nav class="pub-nav" aria-label="Main"><a href="/faq/">FAQ</a><a href="/app/">Log in</a><a class="btn primary" href="/order/">Get leads</a></nav>
+  </div>
+</header>
+
+
+<main class="wz-page">
+  <div class="wz-intro">
     <h1>Start getting leads</h1>
-    <p class="sub">Exclusive leads, charged only when one is delivered. Your first lead is prepaid at sign-up.</p>
+    <p class="muted">Exclusive leads, charged only when one is delivered. Takes about two minutes.</p>
+  </div>
+
+  <div class="wz-card" id="wz">
+    <div class="wz-progress" aria-live="polite">
+      <div class="wz-meta"><span id="wz-label">Step 1 of 4</span><span id="wz-title">Lead type</span></div>
+      <div class="wz-bar"><div id="wz-fill"></div></div>
+    </div>
+
     <div class="msg hidden" id="msg" role="status" aria-live="polite"></div>
 
     <form id="order" novalidate>
-      <section class="step" data-step="1">
-        <h2>1. What jobs do you want?</h2>
-        <div id="types" class="checks" style="margin:12px 0"></div>
+      <!-- 1 -->
+      <section class="wz-step" data-step="type" data-title="Lead type">
+        <h2>Your lead type</h2>
+        <p class="wz-sub">Pick the jobs you want. You can choose more than one. Exact prices show once you set your area.</p>
+        <div id="types" class="wz-types"><div class="wz-loading">Loading lead types…</div></div>
       </section>
 
-      <section class="step" data-step="2" style="margin-top:22px">
-        <h2>2. Where do you work?</h2>
-        <div class="tabs" role="tablist" style="margin-top:10px">
-          <button type="button" data-loc="radius" aria-selected="true">Suburbs</button>
-          <button type="button" data-loc="postcodes" aria-selected="false">Postcode list</button>
-          <button type="button" data-loc="statewide" aria-selected="false">Whole state</button>
+      <!-- 2 -->
+      <section class="wz-step" data-step="area" data-title="Service area" hidden>
+        <h2>Your service area</h2>
+        <p class="wz-sub">Where do you want leads from?</p>
+        <div class="wz-seg" role="tablist" aria-label="How to set your area">
+          <button type="button" role="tab" data-loc="radius" aria-selected="true">Around suburbs</button>
+          <button type="button" role="tab" data-loc="postcodes" aria-selected="false">Postcode list</button>
+          <button type="button" role="tab" data-loc="statewide" aria-selected="false">Whole state</button>
         </div>
+
         <div data-locpane="radius">
           <label for="sub-q">Add up to five suburbs you work from</label>
-          <input id="sub-q" autocomplete="off" placeholder="Start typing a suburb or postcode">
-          <div id="sub-results" class="suggest"></div>
-          <div id="sub-list" style="margin-top:10px"></div>
+          <div class="wz-search">
+            <input id="sub-q" autocomplete="off" placeholder="Start typing a suburb or postcode" role="combobox" aria-expanded="false" aria-controls="sub-results">
+            <div id="sub-results" class="wz-suggest" role="listbox"></div>
+          </div>
+          <div id="sub-list" class="wz-areas"></div>
         </div>
-        <div data-locpane="postcodes" class="hidden">
+        <div data-locpane="postcodes" hidden>
           <label for="pc-city">Nearest city</label><select id="pc-city"></select>
-          <label for="pc-list" style="margin-top:10px">Postcodes</label><textarea id="pc-list" rows="3" placeholder="2000 2010 2150"></textarea>
+          <label for="pc-list" style="margin-top:14px">Postcodes</label>
+          <textarea id="pc-list" rows="4" placeholder="2000, 2010, 2150"></textarea>
+          <p class="muted small" style="margin-top:6px">Separate with commas or spaces.</p>
         </div>
-        <div data-locpane="statewide" class="hidden">
+        <div data-locpane="statewide" hidden>
           <label for="state">State</label>
           <select id="state"><option>NSW</option><option>VIC</option><option>QLD</option><option>WA</option><option>SA</option><option>ACT</option><option>TAS</option><option>NT</option></select>
         </div>
+
+        <div class="wz-price" id="area-price" hidden></div>
       </section>
 
-      <section class="step" data-step="3" style="margin-top:22px">
-        <h2>3. Weekly limit</h2>
-        <p class="muted small">We never deliver more than this in a week. Change it any time.</p>
-        <div class="inline-form" style="margin-top:8px"><input type="number" id="cap" min="5" max="50" value="10" aria-label="Leads a week"><span>leads a week</span></div>
-        <div class="card" id="quote" style="margin-top:12px"><p class="muted">Choose your jobs and area to see prices.</p></div>
-      </section>
-
-      <section class="step" data-step="4" style="margin-top:22px">
-        <h2>4. Your business</h2>
-        <div class="stack">
-          <label for="b-name">Business name (shown to homeowners when they agree to be contacted)</label><input id="b-name" required>
-          <label for="b-abn">ABN</label><input id="b-abn" inputmode="numeric" required>
-          <label for="b-contact">Your name</label><input id="b-contact" autocomplete="name" required>
-          <label for="b-email">Email</label><input id="b-email" type="email" autocomplete="email" required>
-          <label for="b-phone">Mobile</label><input id="b-phone" type="tel" autocomplete="tel" required>
+      <!-- 3 -->
+      <section class="wz-step" data-step="cap" data-title="Weekly limit" hidden>
+        <h2>Your weekly limit</h2>
+        <p class="wz-sub">The most leads we'll send you in a week. Change it any time from your dashboard.</p>
+        <div class="wz-cap">
+          <div class="wz-cap-read"><span id="cap-num">10</span><span class="muted">leads a week</span></div>
+          <input type="range" id="cap" min="5" max="50" step="1" value="10" aria-label="Leads a week">
+          <div class="wz-cap-scale"><span id="cap-min">5</span><span id="cap-max">50</span></div>
         </div>
-        <div class="checks" style="margin-top:14px">
+        <div class="wz-price" id="cap-price"></div>
+      </section>
+
+      <!-- 4 -->
+      <section class="wz-step" data-step="details" data-title="Your details" hidden>
+        <h2>Your details</h2>
+        <p class="wz-sub">Homeowners see your business name when they agree to be contacted.</p>
+        <div class="wz-fields">
+          <div class="wz-f wz-full"><label for="b-name">Business name</label><input id="b-name" autocomplete="organization" required></div>
+          <div class="wz-f"><label for="b-abn">ABN</label><input id="b-abn" inputmode="numeric" placeholder="11 digits" required></div>
+          <div class="wz-f"><label for="b-contact">Your name</label><input id="b-contact" autocomplete="name" required></div>
+          <div class="wz-f"><label for="b-email">Email</label><input id="b-email" type="email" autocomplete="email" required></div>
+          <div class="wz-f"><label for="b-phone">Mobile</label><input id="b-phone" type="tel" autocomplete="tel" placeholder="04xx xxx xxx" required></div>
+        </div>
+
+        <div class="wz-summary" id="summary"></div>
+
+        <div class="checks" style="margin-top:16px">
           <label><input type="checkbox" id="authorise"> <span id="authorise-text"></span></label>
-          <label><input type="checkbox" id="terms"> <span>I agree to the <a href="/legal/terms.html" target="_blank">Terms</a> and <a href="/legal/privacy.html" target="_blank">Privacy Policy</a>.</span></label>
+          <label><input type="checkbox" id="terms"> <span>I agree to the <a href="/legal/terms.html" target="_blank" rel="noopener">Terms</a> and <a href="/legal/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span></label>
         </div>
-        <p class="muted small" style="margin-top:10px">Your first lead is prepaid at sign-up. After that your saved card is charged for each lead as it's delivered.</p>
-        <button class="btn primary block" type="submit" style="margin-top:14px" id="pay-btn">Continue to payment</button>
       </section>
+
+      <p class="wz-err" id="wz-err" role="alert"></p>
+      <div class="wz-nav">
+        <button type="button" class="btn wz-back" id="wz-back" hidden>&larr; Back</button>
+        <button type="button" class="btn primary wz-next" id="wz-next">Continue &rarr;</button>
+        <button type="submit" class="btn primary wz-next" id="pay-btn" hidden>Continue to payment</button>
+      </div>
     </form>
-    <div id="checkout" style="margin-top:16px"></div>
+
+    <div id="checkout" class="wz-checkout" hidden>
+      <h2>Payment</h2>
+      <p class="wz-sub">Your first lead is paid today and your card is saved for future leads.</p>
+      <div id="checkout-mount"></div>
+    </div>
   </div>
-</div>
-<script src="/assets/order.js?v=202611240648"></script>
+
+  <p class="wz-foot muted small">Card payments are processed securely by Stripe. Questions? <a href="/faq/">Read the FAQ</a> or see <a href="/what-counts/">what counts as a lead</a>.</p>
+</main>
+
+<footer class="pub-foot">
+  <div class="pub-wrap">
+    <p><strong>QuoteLeads</strong> · ABN 83 894 208 171 · <a href="mailto:contact@quoteleads.com.au">contact@quoteleads.com.au</a></p>
+    <p><a href="/legal/terms.html">Terms</a> · <a href="/legal/privacy.html">Privacy</a> · <a href="/faq/">FAQ</a></p>
+  </div>
+</footer>
+
+<script src="/assets/order.js?v=202611240910"></script>
 </body>
 </html>
