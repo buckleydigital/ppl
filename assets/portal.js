@@ -11,7 +11,7 @@
   const money = (c) => '$' + (Number(c || 0) / 100).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   const when = (t) => t ? new Date(t).toLocaleString('en-AU', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : ''
   const day = (t) => t ? new Date(t).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }) : ''
-  const OUTCOME = { new: 'New', contacted: 'Contacted', quoted: 'Quoted', won: 'Won', lost: 'Lost' }
+  const OUTCOME = { new: 'New', contacted: 'Contacted', no_answer: 'No answer', quoted: 'Quoted', won: 'Won', lost: 'Lost' }
   const STATUS = {
     pending: ['Setting up', 'warn', 'Your account is being set up.'],
     active: ['Active', 'ok', 'Leads are being delivered.'],
@@ -88,12 +88,16 @@
     box.innerHTML = `
       <div class="page-head"><div><h1>${esc(name || 'Lead')}</h1><p class="muted">${esc(l.lead_type || '')} · ${esc(l.suburb || l.postcode)}</p></div>
         <div class="row-actions"><a class="btn primary" href="tel:${esc(l.phone_e164)}">Call</a><a class="btn" href="sms:${esc(l.phone_e164)}">Text</a>${l.email ? `<a class="btn" href="mailto:${esc(l.email)}">Email</a>` : ''}</div></div>
+      ${l.callback_time ? `<div class="msg ok" style="margin-bottom:16px"><b>Callback booked:</b> ${esc(l.callback_time)}</div>` : ''}
       <div class="card"><label for="outcome">Outcome</label><select id="outcome" style="max-width:240px">${Object.entries(OUTCOME).map(([k, v]) => `<option value="${k}"${k === l.outcome ? ' selected' : ''}>${v}</option>`).join('')}</select></div>
       <div class="card" style="margin-top:16px">${rows.map(([k, v]) => `<div class="kv"><span>${esc(k)}</span><span>${k === 'Phone' ? `<a href="tel:${esc(v)}">${esc(v)}</a>` : esc(v)}</span></div>`).join('')}</div>
       <div class="card" style="margin-top:16px"><h2>Consent</h2><p>${esc(r.consent?.consent_text || 'No consent text came with this lead.')}</p><p class="muted small">Captured ${esc(when(r.consent?.captured_at))}</p></div>
       ${r.sms.length ? `<div class="card" style="margin-top:16px"><h2>Texts</h2>${r.sms.map((m) => `<div class="bubble ${m.direction === 'inbound' ? 'in' : 'out'}">${esc(m.body)}<div class="muted small">${esc(when(m.created_at))}${m.is_ai ? ' · automatic' : ''}</div></div>`).join('')}</div>` : ''}
       <div class="card" style="margin-top:16px">${claim}</div>`
-    $('#outcome').addEventListener('change', (e) => act('portal', { action: 'set_outcome', id: l.id, outcome: e.target.value }, 'Saved'))
+    $('#outcome').addEventListener('change', async (e) => {
+      const res = await act('portal', { action: 'set_outcome', id: l.id, outcome: e.target.value })
+      if (res) flash(e.target.value === 'no_answer' ? (res.followups ? 'Saved. Follow-up texts start tomorrow.' : 'Saved. Switch on no-answer follow-ups in Settings to text them automatically.') : 'Saved')
+    })
     const cf = $('#claim-form')
     if (cf) cf.addEventListener('submit', async (e) => {
       e.preventDefault()
@@ -167,7 +171,11 @@
     f.notify_email.checked = !!s.notifications.email
     f.notify_sms.checked = !!s.notifications.sms
     f.notify_push.checked = !!s.notifications.push
-    f.ai_followup_enabled.checked = !!s.ai_followup_enabled
+    const tf = $('#texts-form')
+    tf.ai_sms_enabled.checked = !!s.ai_sms_enabled
+    tf.followup_enabled.checked = !!s.followup_enabled
+    $('#cb-hours').value = s.callback_hours || ''
+    $('#cb-wrap').classList.toggle('hidden', !tf.ai_sms_enabled.checked)
     $('#wh-url').value = s.webhook.url || ''
     $('#wh-mode').value = s.webhook.auth_mode || 'none'
     $('#wh-header').value = s.webhook.auth_header || ''
@@ -184,7 +192,13 @@
     e.preventDefault()
     const f = e.target
     if (f.notify_push.checked) await enablePush().catch((err) => flash(err.message, 'err'))
-    await act('portal', { action: 'update_settings', notify_email: f.notify_email.checked, notify_sms: f.notify_sms.checked, notify_push: f.notify_push.checked, ai_followup_enabled: f.ai_followup_enabled.checked }, 'Notifications saved')
+    await act('portal', { action: 'update_settings', notify_email: f.notify_email.checked, notify_sms: f.notify_sms.checked, notify_push: f.notify_push.checked }, 'Notifications saved')
+  })
+  $('#texts-form').ai_sms_enabled.addEventListener('change', (e) => $('#cb-wrap').classList.toggle('hidden', !e.target.checked))
+  $('#texts-form').addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const f = e.target
+    await act('portal', { action: 'update_settings', ai_sms_enabled: f.ai_sms_enabled.checked, followup_enabled: f.followup_enabled.checked, callback_hours: $('#cb-hours').value.trim() || 'Weekdays 8am to 5pm' }, 'Text settings saved')
   })
   $('#wh-mode').addEventListener('change', () => {
     const m = $('#wh-mode').value

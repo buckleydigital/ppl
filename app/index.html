@@ -10,10 +10,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/theme.css?v=202611240930">
-<link rel="stylesheet" href="/assets/base.css?v=202611240930">
+<link rel="stylesheet" href="/assets/theme.css?v=202611242152">
+<link rel="stylesheet" href="/assets/base.css?v=202611242152">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="/config.js?v=202611240930"></script>
+<script src="/config.js?v=202611242152"></script>
 
 <link rel="manifest" href="/app/manifest.webmanifest">
 <meta name="theme-color" content="#4797FF">
@@ -119,7 +119,16 @@
           <label><input type="checkbox" name="notify_email"> Email me each lead</label>
           <label><input type="checkbox" name="notify_sms"> Text me each lead</label>
           <label><input type="checkbox" name="notify_push"> Push notifications on this device</label>
-          <label><input type="checkbox" name="ai_followup_enabled"> <span>Text new leads for me <span class="muted">(optional)</span><span class="muted small" style="display:block">We text each new lead in your business name, then on days 2, 5 and 10 until they reply. Off unless you switch it on.</span></span></label>
+          <button class="btn" type="submit">Save</button>
+        </form>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <h2>Texts to your leads</h2>
+        <p class="muted small" style="margin:4px 0 14px">Every new lead gets one text in your business name confirming their enquiry. Replies are forwarded to you. The two extras below are optional and off unless you switch them on.</p>
+        <form id="texts-form" class="checks">
+          <label><input type="checkbox" name="ai_sms_enabled"> <span><b>AI SMS</b><span class="muted small" style="display:block">When a lead texts back, we reply for you and book a time for you to call them. You're told the time as soon as it's agreed.</span></span></label>
+          <div id="cb-wrap" style="padding-left:28px"><label for="cb-hours" style="font-weight:500">Times you can take calls</label><input id="cb-hours" maxlength="200" placeholder="Weekdays 8am to 5pm"></div>
+          <label><input type="checkbox" name="followup_enabled"> <span><b>No-answer follow-ups</b><span class="muted small" style="display:block">When you mark a lead "No answer", we text them on day 1, 3, 7 and 10 until they reply or you move the lead on.</span></span></label>
           <button class="btn" type="submit">Save</button>
         </form>
       </div>
@@ -156,8 +165,8 @@
   </main>
 </div>
 
-<script src="/assets/core.js?v=202611240930"></script>
-<script src="/assets/views.js?v=202611240930"></script>
-<script src="/assets/portal.js?v=202611240930"></script>
+<script src="/assets/core.js?v=202611242152"></script>
+<script src="/assets/views.js?v=202611242152"></script>
+<script src="/assets/portal.js?v=202611242152"></script>
 </body>
 </html>
