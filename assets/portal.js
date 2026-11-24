@@ -20,7 +20,7 @@
     disputed: ['On hold', 'warn', 'Your account is on hold. Please contact us.'],
     dormant: ['Not active yet', 'warn', 'Your account hasn\'t been switched on yet.'],
   }
-  const CLAIM_REASONS = { invalid_number: 'Invalid or disconnected number', outside_area: 'Outside my agreed area', duplicate: 'Duplicate (sent to me in the last 30 days)', fake: 'Obviously fake' }
+  const CLAIM_REASONS = { invalid_number: 'Phone number invalid or disconnected', invalid_email: 'Email address can\'t receive mail', outside_area: 'Postcode outside my agreed area', wrong_service: 'Not the service I selected', duplicate: 'Duplicate (sent to me in the last 30 days)', fake: 'Not a real person' }
 
   let me = null
   function flash(text, kind = 'ok') {
@@ -82,7 +82,7 @@
         ? `<details><summary class="btn">Report a bad lead</summary><form id="claim-form" class="stack" style="margin-top:10px">
             <label for="c-reason">Reason</label><select id="c-reason">${Object.entries(CLAIM_REASONS).map(([k, v]) => `<option value="${k}">${esc(v)}</option>`).join('')}</select>
             <label for="c-notes">Details (optional)</label><textarea id="c-notes" rows="2"></textarea>
-            <p class="muted small">Claims close ${esc(when(r.claim_window_closes_at))}. A homeowner not answering isn't covered.</p>
+            <p class="muted small">Claims close ${esc(when(r.claim_window_closes_at))}. Not covered: the homeowner not answering, deciding not to go ahead, or getting other quotes. <a href="/what-counts/" target="_blank">What counts as a lead</a></p>
             <button class="btn primary" type="submit">Submit claim</button></form></details>`
         : '<p class="muted small">The claim window for this lead has closed.</p>'
     box.innerHTML = `
@@ -112,6 +112,7 @@
       ['Card', r.card ? `${esc((r.card.brand || '').toUpperCase())} •••• ${esc(r.card.last4)}` : 'No card saved'],
       ['Credit', money(r.credit_cents)],
       ['This week', `${r.this_week} of ${r.weekly_cap} leads`],
+      ['Spending limit', esc(r.spending_limit_text || '')],
       ['First lead', { none: 'Not paid', held: 'Prepaid, waiting', used: 'Used', refund_flagged: 'Refund pending', refunded: 'Refunded' }[r.prepaid_status] || ''],
     ].map(([k, v]) => `<div class="card stat"><span class="muted small">${esc(k)}</span><b style="font-size:18px">${v}</b></div>`).join('') +
       `<div class="card"><button class="btn primary block" type="button" id="card-btn">Update card</button></div>`
@@ -119,7 +120,7 @@
     $('#cap-input').value = r.weekly_cap
     $('#cap-input').min = r.cap_limits.min
     $('#cap-input').max = r.cap_limits.max
-    $('#cap-text').textContent = r.spending_limit_text ? `= ${r.spending_limit_text}` : ''
+    $('#cap-text').textContent = r.spending_limit_text || ''
     $('#charges').innerHTML = r.charges.length
       ? `<div class="table-wrap"><table class="list"><thead><tr><th>Date</th><th>What</th><th>Charged</th><th>Status</th></tr></thead><tbody>${r.charges.map((c) => `
         <tr><td>${esc(day(c.created_at))}</td><td>${esc(c.description || c.kind)}${c.credit_applied_cents ? `<div class="muted small">${money(c.credit_applied_cents)} from credit</div>` : ''}</td>

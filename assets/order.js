@@ -47,7 +47,7 @@
       if (!res.ok) { $('#quote').innerHTML = `<p class="muted">${esc(d.error || 'Couldn\'t price that yet.')}</p>`; return }
       const names = Object.fromEntries($$('#types input').map((i) => [i.value, i.dataset.name]))
       $('#quote').innerHTML = d.areas.map((a) => `<div class="kv"><span>${esc(a.label)}<div class="muted small">${a.postcode_count} postcodes</div></span><span>${a.prices.map((x) => `${esc(names[x.lead_type])}: <b>${money(x.price_ex_cents)}</b> + GST`).join('<br>')}</span></div>`).join('') +
-        `<p style="margin-top:10px">Spending limit: <b>${esc(d.spending_limit_text)}</b></p><p class="muted small">Due today: your first lead, ${money(d.first_lead_ex_cents)} + GST.</p>`
+        `<p style="margin-top:10px"><b>${esc(d.spending_limit_text)}</b><br><span class="muted small">That's the most you can be charged in a week. No surprise bills.</span></p><p class="muted small">Due today: your first lead, ${money(d.first_lead_ex_cents)} + GST.</p>`
     }, 350)
   }
 
