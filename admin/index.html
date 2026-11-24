@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="icon" href="/brand/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/theme.css?v=202611240310">
+<link rel="stylesheet" href="/assets/base.css?v=202611240310">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="/config.js?v=202611240310"></script>
+
+<title>Admin · QuoteLeads Pay Per Lead</title>
+</head>
+<body>
+<div class="auth" id="signin">
+  <div class="auth-card">
+    <div class="logo" data-logo></div>
+    <h1>Admin sign in</h1>
+    <p class="sub">Staff only.</p>
+    <div class="msg hidden" role="status" aria-live="polite"></div>
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" data-tab="password" aria-selected="true">Password</button>
+      <button type="button" role="tab" data-tab="link" aria-selected="false">Email me a link</button>
+    </div>
+    <form id="form-password" novalidate>
+      <div class="field"><label for="pw-email">Email</label><input id="pw-email" name="email" type="email" autocomplete="email" required></div>
+      <div class="field"><label for="pw-pass">Password</label><input id="pw-pass" name="password" type="password" autocomplete="current-password" required></div>
+      <button class="btn primary block" type="submit">Sign in</button>
+      <div class="auth-foot"><button class="btn link" type="button" id="forgot">Forgot password</button></div>
+    </form>
+    <form id="form-link" class="hidden" novalidate>
+      <div class="field"><label for="ml-email">Email</label><input id="ml-email" name="email" type="email" autocomplete="email" required></div>
+      <button class="btn primary block" type="submit">Email me a sign-in link</button>
+    </form>
+    <form id="form-newpw" class="hidden" novalidate>
+      <div class="field"><label for="np-pass">New password</label><input id="np-pass" name="password" type="password" autocomplete="new-password" minlength="10" required></div>
+      <button class="btn primary block" type="submit">Save password and sign in</button>
+    </form>
+  </div>
+</div>
+
+
+<div class="shell hidden" id="shell">
+  <aside class="side">
+    <div class="logo" data-logo></div>
+    <nav aria-label="Admin">
+      <a href="#dashboard" data-view="dashboard">Dashboard</a>
+      <a href="#customers" data-view="customers">Customers</a>
+      <a href="#leads" data-view="leads">Leads</a>
+      <a href="#claims" data-view="claims">Credit claims</a>
+      <a href="#pricing" data-view="pricing">Pricing</a>
+      <a href="#areas" data-view="areas">Areas</a>
+      <a href="#payments" data-view="payments">Payments</a>
+      <a href="#settings" data-view="settings">Settings</a>
+      <a href="#audit" data-view="audit">Audit log</a>
+    </nav>
+    <div class="who">
+      <span class="email" id="who-email"></span>
+      <button class="btn link" type="button" id="signout">Sign out</button>
+    </div>
+  </aside>
+  <main class="main" id="main">
+    <div class="msg hidden" id="flash" role="status"></div>
+    <section data-page="dashboard"><div class="page-head"><h1>Dashboard</h1><span class="muted small">Last 30 days</span></div><div id="p-dashboard"></div></section>
+    <section data-page="customers" class="hidden"><div class="page-head"><h1>Customers</h1></div><div id="p-customers"></div></section>
+    <section data-page="customer" class="hidden"><p><a href="#customers">&larr; Customers</a></p><div id="p-customer"></div></section>
+    <section data-page="leads" class="hidden"><div class="page-head"><h1>Leads</h1></div><div id="p-leads"></div></section>
+    <section data-page="lead" class="hidden"><p><a href="#leads">&larr; Leads</a></p><div id="p-lead"></div></section>
+    <section data-page="claims" class="hidden"><div class="page-head"><h1>Credit claims</h1></div><div id="p-claims"></div></section>
+    <section data-page="pricing" class="hidden"><div class="page-head"><h1>Pricing</h1><span class="muted small">AUD ex GST</span></div><div id="p-pricing"></div></section>
+    <section data-page="areas" class="hidden"><div class="page-head"><h1>Areas and campaigns</h1></div><div id="p-areas"></div></section>
+    <section data-page="payments" class="hidden"><div class="page-head"><h1>Payments</h1></div><div id="p-payments"></div></section>
+    <section data-page="settings" class="hidden"><div class="page-head"><h1>Settings</h1></div><div id="p-settings"></div></section>
+    <section data-page="audit" class="hidden"><div class="page-head"><h1>Audit log</h1></div><div id="p-audit"></div></section>
+    <section data-page="denied" class="hidden"><div class="page-head"><h1>Admins only</h1></div><p class="muted">This login doesn't have admin access.</p></section>
+  </main>
+</div>
+
+<script src="/assets/core.js?v=202611240310"></script>
+<script src="/assets/views.js?v=202611240310"></script>
+<script src="/assets/admin.js?v=202611240310"></script>
+</body>
+</html>

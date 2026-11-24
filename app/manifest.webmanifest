@@ -1,0 +1,17 @@
+{
+  "name": "QuoteLeads Pay Per Lead",
+  "short_name": "QuoteLeads",
+  "start_url": "/app/",
+  "scope": "/app/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#4797FF",
+  "icons": [
+    {
+      "src": "/brand/mark.png",
+      "sizes": "165x165",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

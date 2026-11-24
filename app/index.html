@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="icon" href="/brand/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/theme.css?v=202611240310">
+<link rel="stylesheet" href="/assets/base.css?v=202611240310">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="/config.js?v=202611240310"></script>
+
+<link rel="manifest" href="/app/manifest.webmanifest">
+<meta name="theme-color" content="#4797FF">
+<title>QuoteLeads Pay Per Lead</title>
+</head>
+<body>
+<div class="auth" id="signin">
+  <div class="auth-card">
+    <div class="logo" data-logo></div>
+    <h1>Sign in</h1>
+    <p class="sub">Your leads, billing and settings.</p>
+    <div class="msg hidden" role="status" aria-live="polite"></div>
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" data-tab="password" aria-selected="true">Password</button>
+      <button type="button" role="tab" data-tab="link" aria-selected="false">Email me a link</button>
+    </div>
+    <form id="form-password" novalidate>
+      <div class="field"><label for="pw-email">Email</label><input id="pw-email" name="email" type="email" autocomplete="email" required></div>
+      <div class="field"><label for="pw-pass">Password</label><input id="pw-pass" name="password" type="password" autocomplete="current-password" required></div>
+      <button class="btn primary block" type="submit">Sign in</button>
+      <div class="auth-foot"><button class="btn link" type="button" id="forgot">Forgot password</button></div>
+    </form>
+    <form id="form-link" class="hidden" novalidate>
+      <div class="field"><label for="ml-email">Email</label><input id="ml-email" name="email" type="email" autocomplete="email" required></div>
+      <button class="btn primary block" type="submit">Email me a sign-in link</button>
+    </form>
+    <form id="form-newpw" class="hidden" novalidate>
+      <div class="field"><label for="np-pass">New password</label><input id="np-pass" name="password" type="password" autocomplete="new-password" minlength="10" required></div>
+      <button class="btn primary block" type="submit">Save password and sign in</button>
+    </form>
+  </div>
+</div>
+
+
+<div class="shell hidden" id="shell">
+  <aside class="side">
+    <div class="logo" data-logo></div>
+    <nav aria-label="Portal">
+      <a href="#leads" data-view="leads">Leads</a>
+      <a href="#billing" data-view="billing">Billing</a>
+      <a href="#settings" data-view="settings">Settings</a>
+      <a href="#profile" data-view="profile">Business profile</a>
+    </nav>
+    <div class="who">
+      <span class="email" id="who-email"></span>
+      <a class="hidden" id="to-admin" href="/admin/">Admin</a>
+      <button class="btn link" type="button" id="signout">Sign out</button>
+    </div>
+  </aside>
+  <main class="main" id="main">
+    <div class="msg hidden" id="flash" role="status"></div>
+
+    <section data-page="leads">
+      <div class="page-head">
+        <div><h1>Leads</h1><p class="muted" id="status-line"></p></div>
+        <div class="row-actions" id="delivery-actions"></div>
+      </div>
+      <div class="filters">
+        <input type="search" id="f-q" placeholder="Search name, suburb, postcode or phone" aria-label="Search leads">
+        <select id="f-outcome" aria-label="Outcome"><option value="">All outcomes</option><option value="new">New</option><option value="contacted">Contacted</option><option value="quoted">Quoted</option><option value="won">Won</option><option value="lost">Lost</option></select>
+        <select id="f-type" aria-label="Lead type"><option value="">All lead types</option></select>
+      </div>
+      <div id="lead-list"></div>
+      <div class="pager"><button class="btn" type="button" id="more" hidden>Load more</button></div>
+    </section>
+
+    <section data-page="lead" class="hidden">
+      <p><a href="#leads">&larr; All leads</a></p>
+      <div id="lead-detail"></div>
+    </section>
+
+    <section data-page="billing" class="hidden">
+      <div class="page-head"><h1>Billing</h1></div>
+      <div class="grid" id="bill-stats"></div>
+      <div class="card" style="margin-top:16px">
+        <h2>Weekly limit</h2>
+        <p class="muted small" style="margin:4px 0 12px">We never deliver more than this many leads in a week (Monday to Sunday).</p>
+        <form id="cap-form" class="inline-form"><input type="number" id="cap-input" min="1" step="1" aria-label="Leads a week"><span class="muted" id="cap-text"></span><button class="btn" type="submit">Save</button></form>
+      </div>
+      <div class="card" style="margin-top:16px"><h2>Charges</h2><div id="charges"></div></div>
+      <div class="card" style="margin-top:16px"><h2>Weekly tax invoices</h2><div id="invoices"></div></div>
+    </section>
+
+    <section data-page="settings" class="hidden">
+      <div class="page-head"><h1>Settings</h1></div>
+      <div class="card"><h2>Lead types</h2><form id="types-form"><div id="types" class="checks"></div><button class="btn" type="submit">Save lead types</button></form></div>
+      <div class="card" style="margin-top:16px">
+        <h2>Service areas</h2>
+        <div id="areas"></div>
+        <details style="margin-top:12px"><summary class="btn link">Add an area</summary>
+          <form id="area-form" class="stack" style="margin-top:12px">
+            <div class="tabs" role="tablist"><button type="button" data-areatab="radius" aria-selected="true">Suburb + radius</button><button type="button" data-areatab="postcodes" aria-selected="false">Postcodes</button></div>
+            <div data-areapane="radius"><label for="sub-q">Suburb</label><input id="sub-q" autocomplete="off" placeholder="Start typing a suburb"><div id="sub-results" class="suggest"></div>
+              <label for="sub-km" style="margin-top:10px">Distance</label><select id="sub-km"><option>50</option><option>75</option><option>100</option></select></div>
+            <div data-areapane="postcodes" class="hidden"><label for="pc-list">Postcodes</label><textarea id="pc-list" rows="3" placeholder="2000 2010 2150"></textarea></div>
+            <button class="btn primary" type="submit">Add area</button>
+          </form>
+        </details>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <h2>Notifications</h2>
+        <form id="notify-form" class="checks">
+          <label><input type="checkbox" name="notify_email"> Email me each lead</label>
+          <label><input type="checkbox" name="notify_sms"> Text me each lead</label>
+          <label><input type="checkbox" name="notify_push"> Push notifications on this device</label>
+          <label><input type="checkbox" name="ai_followup_enabled"> Text new leads for me (first contact, then day 2, 5 and 10 until they reply)</label>
+          <button class="btn" type="submit">Save</button>
+        </form>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <h2>CRM webhook</h2>
+        <form id="webhook-form" class="stack">
+          <label for="wh-url">Webhook URL</label><input id="wh-url" type="url" placeholder="https://">
+          <label for="wh-mode">Authentication</label>
+          <select id="wh-mode"><option value="none">None</option><option value="header">Header with a key</option><option value="hmac">Signed (HMAC)</option></select>
+          <div id="wh-auth" class="hidden"><label for="wh-header">Header name</label><input id="wh-header" placeholder="Authorization"><label for="wh-secret">Key / secret</label><input id="wh-secret" type="password" placeholder="Leave blank to keep the current one"></div>
+          <div class="row-actions"><button class="btn" type="submit">Save</button><button class="btn" type="button" id="wh-test">Send a test lead</button></div>
+        </form>
+      </div>
+    </section>
+
+    <section data-page="profile" class="hidden">
+      <div class="page-head"><h1>Business profile</h1></div>
+      <form class="card stack" id="profile-form">
+        <label for="p-name">Business name</label><input id="p-name" name="business_name" required>
+        <p class="muted small">This is the name homeowners see in the consent line. Changes are checked by us before they apply.</p>
+        <label for="p-legal">Legal name</label><input id="p-legal" name="legal_name">
+        <label for="p-abn">ABN</label><input id="p-abn" name="abn" inputmode="numeric">
+        <label for="p-contact">Contact name</label><input id="p-contact" name="contact_name">
+        <label for="p-phone">Phone</label><input id="p-phone" name="phone" type="tel">
+        <label>Email</label><input id="p-email" disabled>
+        <button class="btn primary" type="submit">Save profile</button>
+      </form>
+    </section>
+
+    <section data-page="no-account" class="hidden">
+      <div class="page-head"><h1>No business account yet</h1></div>
+      <p class="muted">This login isn't linked to a business account. If you've just signed up, it's being set up now. Otherwise contact <a id="support-link"></a>.</p>
+    </section>
+  </main>
+</div>
+
+<script src="/assets/core.js?v=202611240310"></script>
+<script src="/assets/views.js?v=202611240310"></script>
+<script src="/assets/portal.js?v=202611240310"></script>
+</body>
+</html>
