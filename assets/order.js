@@ -89,7 +89,7 @@
     ap.hidden = false
     ap.innerHTML = quote.areas.map((a) => `<div class="wz-price-row"><div><b>${esc(a.label)}</b><div class="muted small">${a.postcode_count} postcodes</div></div>
       <div class="wz-price-list">${a.prices.map((x) => `<div>${esc(names[x.lead_type] || x.lead_type)} <b>${money(x.price_ex_cents)}</b><span class="muted small"> + GST</span></div>`).join('')}</div></div>`).join('')
-    cp.innerHTML = `<div class="wz-limit">${esc(quote.spending_limit_text)}</div><p class="muted small">That's the most you can be charged in a week. No surprise bills, and you can pause or cancel any time.</p>`
+    cp.innerHTML = `<div class="wz-limit">${esc(quote.spending_limit_text)}</div><p class="muted small">That's the most you can be charged in a week. No surprise bills.</p>`
   }
 
   // ── summary (last step) ──

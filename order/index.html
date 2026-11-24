@@ -10,10 +10,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/theme.css?v=202611240915">
-<link rel="stylesheet" href="/assets/base.css?v=202611240915">
+<link rel="stylesheet" href="/assets/theme.css?v=202611240916">
+<link rel="stylesheet" href="/assets/base.css?v=202611240916">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="/config.js?v=202611240915"></script>
+<script src="/config.js?v=202611240916"></script>
 
 <title>Start getting leads · QuoteLeads Pay Per Lead</title>
 <script src="https://js.stripe.com/v3/"></script>
@@ -30,8 +30,7 @@
 <main class="wz-page">
   <div class="wz-intro">
     <h1>Start getting leads</h1>
-    <p class="muted">Exclusive leads, charged only when one is delivered. Takes about two minutes.</p>
-    <p class="wz-assure"><span>No lock-in contract</span><span>Cancel anytime</span><span>No cancellation fee</span></p>
+    <p class="muted">Exclusive leads, charged only when one is delivered. No lock-in, cancel anytime.</p>
   </div>
 
   <div class="wz-card" id="wz">
@@ -85,7 +84,7 @@
       <!-- 3 -->
       <section class="wz-step" data-step="cap" data-title="Weekly limit" hidden>
         <h2>Your weekly limit</h2>
-        <p class="wz-sub">The most leads we'll send you in a week. Change it, pause or cancel any time from your dashboard.</p>
+        <p class="wz-sub">The most leads we'll send you in a week. Change it or pause any time from your dashboard.</p>
         <div class="wz-cap">
           <div class="wz-cap-read"><span id="cap-num">10</span><span class="muted">leads a week</span></div>
           <input type="range" id="cap" min="5" max="50" step="1" value="10" aria-label="Leads a week">
@@ -108,12 +107,7 @@
 
         <div class="wz-summary" id="summary"></div>
 
-        <ul class="wz-promise">
-          <li><b>No lock-in.</b> No contract, no minimum spend and no cancellation fee.</li>
-          <li><b>Pause in one tap.</b> Stop deliveries from your dashboard whenever you like. You're never charged while paused.</li>
-          <li><b>Cancel anytime.</b> Pause for good, or email us and we'll close your account.</li>
-          <li><b>First lead guaranteed.</b> If it isn't delivered within 14 days, we refund it.</li>
-        </ul>
+        <p class="muted small" style="margin-top:14px">No contract or cancellation fee. Pause or cancel any time. If your first lead isn't delivered within 14 days, we refund it.</p>
 
         <div class="checks" style="margin-top:16px">
           <label><input type="checkbox" id="authorise"> <span id="authorise-text"></span></label>
@@ -136,7 +130,7 @@
     </div>
   </div>
 
-  <p class="wz-foot muted small">No lock-in contract. Cancel anytime. Card payments are processed securely by Stripe. Questions? <a href="/faq/">Read the FAQ</a> or see <a href="/what-counts/">what counts as a lead</a>.</p>
+  <p class="wz-foot muted small">Card payments are processed securely by Stripe. Questions? <a href="/faq/">Read the FAQ</a> or see <a href="/what-counts/">what counts as a lead</a>.</p>
 </main>
 
 <footer class="pub-foot">
@@ -146,6 +140,6 @@
   </div>
 </footer>
 
-<script src="/assets/order.js?v=202611240915"></script>
+<script src="/assets/order.js?v=202611240916"></script>
 </body>
 </html>
